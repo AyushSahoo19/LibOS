@@ -1,0 +1,891 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import TerminalChart from '../components/TerminalChart.astro';
+import { getCollection } from 'astro:content';
+
+const allEntries = await getCollection('library');
+
+// Predefined domains for a structured filter experience
+const domains = ["Framework", "Tool", "Repository", "Workflow", "AI Agent", "Machine Learning", "Robotics", "Quantum Computing", "Physics Engine", "Chemistry", "Trading", "3D Software", "Library", "Math"];
+
+// Mock Top Profiles (Diverse Innovators)
+const topProfiles = [
+  { name: "Linus Torvalds", role: "Kernel Creator", project: "Linux / Git", initials: "LT", github: "https://github.com/torvalds" },
+  { name: "Yann LeCun", role: "Chief AI Scientist", project: "PyTorch", initials: "YL", github: "https://github.com/ylecun" },
+  { name: "Guillermo Rauch", role: "Vercel CEO", project: "Next.js", initials: "GR", github: "https://github.com/rauchg" },
+  { name: "Ton Roosendaal", role: "Chairman", project: "Blender", initials: "TR", github: "https://github.com/tonroosendaal" },
+  { name: "Emanuel Todorov", role: "Founder", project: "MuJoCo", initials: "ET", github: "https://github.com/google-deepmind/mujoco" },
+  { name: "Greg Landrum", role: "Creator", project: "RDKit", initials: "GL", github: "https://github.com/greglandrum" }
+];
+
+const trendingStacks = [
+  { name: "React + Tailwind", usage: "32% growth", icon: "⚛️" },
+  { name: "Python + PyTorch", usage: "45% growth", icon: "🐍" },
+  { name: "Rust + Wasm", usage: "18% growth", icon: "🦀" },
+  { name: "C++ + MuJoCo", usage: "Physics Research", icon: "⚙️" }
+];
+---
+
+<Layout title="LibOS | Directory of Repos & Tools">
+  <section class="hero relative">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <h1 class="title-glow text-gradient">The Ultimate Library</h1>
+      <p class="subtitle">A curated, minimalist directory representing the absolute best repositories, tools, frameworks, and workflows for modern developers and innovators.</p>
+      
+      <div class="search-bar">
+        <input id="search-input" type="text" placeholder="Search repos, tools, frameworks…" class="glass-input" autocomplete="off" />
+        <button class="btn-primary" id="search-clear" aria-label="Clear">✕</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="directory container layout-split">
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <div class="filters" id="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        {domains.map((domain) => (
+          <button class="filter-btn" data-filter={domain.toLowerCase()}>{domain}s</button>
+        ))}
+      </div>
+
+      <div class="grid" id="card-grid">
+        {allEntries.map((entry) => (
+          <Card 
+            title={entry.data.title}
+            description={entry.data.description}
+            domain={entry.data.domain}
+            slug={entry.id || entry.slug}
+            stars={entry.data.stars}
+          />
+        ))}
+      </div>
+      <div class="empty-state" id="empty-state" style="display:none">
+        <span class="empty-icon">⌀</span>
+        <p>No results found. Try a different query or filter.</p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3 class="sidebar-title">Top Innovators</h3>
+      <div class="profiles-list">
+        {topProfiles.map((profile) => (
+          <a href={profile.github} target="_blank" rel="noopener noreferrer" class="profile-card">
+            <div class="avatar">{profile.initials}</div>
+            <div class="profile-meta">
+              <span class="name">{profile.name}</span>
+              <span class="role">{profile.role}</span>
+              <span class="project">Top: {profile.project}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <div class="sidebar-spacer"></div>
+
+      <h3 class="sidebar-title">Trending Stacks</h3>
+      <div class="stacks-list">
+        {trendingStacks.map((stack) => (
+          <div class="stack-card">
+            <span class="stack-icon">{stack.icon}</span>
+            <div class="stack-meta">
+              <span class="stack-name">{stack.name}</span>
+              <span class="stack-usage">{stack.usage}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="sidebar-spacer"></div>
+
+      <h3 class="sidebar-title">Weekly Spotlight</h3>
+      <a href="https://github.com/Qiskit/qiskit" target="_blank" rel="noopener noreferrer" class="spotlight-card">
+        <div class="spotlight-badge">Featured</div>
+        <h4>Qiskit</h4>
+        <p>The definitive open-source quantum computing framework by IBM.</p>
+        <span class="spotlight-link">View Repository →</span>
+      </a>
+    </aside>
+  </section>
+
+  <!-- Content Expansion Area -->
+  <section class="container expansion-grid pb-section">
+    <!-- Col 1: Releases -->
+    <div class="exp-column">
+      <div class="exp-header">
+        <h3 class="exp-title">New Releases</h3>
+        <a href="/releases" class="exp-link">View Timeline →</a>
+      </div>
+      <div class="exp-content">
+        <a href="/releases" class="exp-item">
+          <span class="exp-badge alpha">Alpha</span>
+          <div class="exp-text">
+            <h4>React 19 RC</h4>
+            <p>The compiler is finally here. Test new hooks.</p>
+          </div>
+        </a>
+        <a href="/releases" class="exp-item">
+          <span class="exp-badge stable">Stable</span>
+          <div class="exp-text">
+            <h4>PyTorch 2.4</h4>
+            <p>Significant CPU optimizations and TorchInductor.</p>
+          </div>
+        </a>
+        <a href="/releases" class="exp-item">
+          <span class="exp-badge beta">Beta</span>
+          <div class="exp-text">
+            <h4>Next.js 15 RC</h4>
+            <p>Caching semantics updated native React 19 support.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Col 2: Deep Stacks -->
+    <div class="exp-column">
+      <div class="exp-header">
+        <h3 class="exp-title">Explore Stacks</h3>
+        <a href="/stacks" class="exp-link">View Hub →</a>
+      </div>
+      <div class="exp-content">
+        <a href="/stacks" class="exp-item stack-variant">
+          <div class="stack-icons">⚛️ + 🐘</div>
+          <div class="exp-text">
+            <h4>React + Supabase</h4>
+            <p>The ultimate open-source alternative to Firebase.</p>
+          </div>
+        </a>
+        <a href="/stacks" class="exp-item stack-variant">
+          <div class="stack-icons">🐍 + ⚙️</div>
+          <div class="exp-text">
+            <h4>Python + MuJoCo</h4>
+            <p>Advanced reinforcement learning pipelines.</p>
+          </div>
+        </a>
+        <a href="/stacks" class="exp-item stack-variant">
+          <div class="stack-icons">🦀 + 🌐</div>
+          <div class="exp-text">
+            <h4>Rust + Wasm</h4>
+            <p>High-performant memory-safe web binaries.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Col 3: Top Rated -->
+    <div class="exp-column">
+      <div class="exp-header">
+        <h3 class="exp-title">Top Rated</h3>
+        <a href="/top-rated" class="exp-link">Leaderboard →</a>
+      </div>
+      <div class="exp-content leaderboard">
+        <div class="lb-item">
+          <span class="lb-rank">1</span>
+          <div class="lb-meta">
+            <span class="lb-name">PyTorch</span>
+            <span class="lb-detail">ML Framework</span>
+          </div>
+        </div>
+        <div class="lb-item">
+          <span class="lb-rank">2</span>
+          <div class="lb-meta">
+            <span class="lb-name">React</span>
+            <span class="lb-detail">UI Library</span>
+          </div>
+        </div>
+        <div class="lb-item">
+          <span class="lb-rank">3</span>
+          <div class="lb-meta">
+            <span class="lb-name">Linux</span>
+            <span class="lb-detail">Kernel</span>
+          </div>
+        </div>
+        <div class="lb-item">
+          <span class="lb-rank">4</span>
+          <div class="lb-meta">
+            <span class="lb-name">Blender</span>
+            <span class="lb-detail">3D Software</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ecosystem Pulse chart — full width below directory -->
+  <section class="container metrics-section">
+    <div class="metrics-label">
+      <span class="metrics-label-line"></span>
+      <span class="metrics-label-text">Ecosystem Pulse</span>
+      <span class="metrics-label-line"></span>
+    </div>
+    <TerminalChart />
+  </section>
+
+</Layout>
+
+<script>
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const clearBtn = document.getElementById('search-clear') as HTMLButtonElement;
+  const filterBar = document.getElementById('filter-bar');
+  const grid = document.getElementById('card-grid');
+  const emptyState = document.getElementById('empty-state');
+
+  let activeFilter = 'all';
+  let searchQuery = '';
+
+  function applyFilters() {
+    const cards = grid!.querySelectorAll<HTMLAnchorElement>('.card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const domain = card.dataset.domain || '';
+      const title = card.dataset.title || '';
+      const desc = card.dataset.desc || '';
+
+      const matchesDomain = activeFilter === 'all' || domain === activeFilter;
+      const matchesSearch = searchQuery === '' ||
+        title.includes(searchQuery) ||
+        desc.includes(searchQuery);
+
+      const show = matchesDomain && matchesSearch;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
+    });
+
+    emptyState!.style.display = visibleCount === 0 ? 'flex' : 'none';
+    // Dim the clear button when no query
+    clearBtn!.style.opacity = searchQuery ? '1' : '0.3';
+  }
+
+  // Search input — live filter
+  searchInput?.addEventListener('input', () => {
+    searchQuery = searchInput.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  // Clear button
+  clearBtn?.addEventListener('click', () => {
+    searchInput.value = '';
+    searchQuery = '';
+    applyFilters();
+    searchInput.focus();
+  });
+
+  // Filter buttons
+  filterBar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+    if (!btn) return;
+
+    filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter || 'all';
+    applyFilters();
+  });
+
+  // Init — dim clear button
+  applyFilters();
+</script>
+
+<style is:global>
+  .hero {
+    position: relative;
+    padding: 6rem 0 5rem;
+    text-align: center;
+    overflow: visible;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: glowBreathe 8s ease-in-out infinite;
+  }
+
+  @keyframes glowBreathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  }
+
+  @keyframes slideFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.04em;
+    font-weight: 800;
+    opacity: 0;
+    animation: slideFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 650px;
+    margin: 0 auto 3rem;
+    line-height: 1.6;
+    opacity: 0;
+    animation: slideFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  }
+
+  .search-bar {
+    display: flex;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    opacity: 0;
+    animation: slideFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+
+  .glass-input {
+    flex-grow: 1;
+    padding: 0.8rem 1.25rem;
+    border-radius: 8px;
+    background: rgba(20, 20, 20, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-body);
+    outline: none;
+    transition: all 0.25s ease;
+  }
+
+  .glass-input:focus {
+    border-color: var(--accent-neon);
+    background: rgba(26, 26, 26, 0.8);
+    box-shadow: 0 0 15px var(--accent-glow);
+  }
+
+  .btn-primary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    opacity: 0.3;
+    flex-shrink: 0;
+  }
+
+  .btn-primary:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+  }
+
+  /* Metrics section */
+  .metrics-section {
+    padding-bottom: 5rem;
+  }
+
+  .metrics-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0;
+  }
+
+  .metrics-label-line {
+    flex: 1;
+    height: 1px;
+    background: #1e1e1e;
+  }
+
+  .metrics-label-text {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #333;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+
+  /* Main Grid Sizing Fix */
+  .main-content {
+    min-width: 0;
+  }
+
+  /* Two Column Layout */
+  .layout-split {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 2rem;
+    padding-bottom: 6rem;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .layout-split {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .filters {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem; /* Space for scrolling */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+
+  .filter-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    background: var(--surface-hover);
+  }
+
+  .filter-btn.active {
+    background: rgba(57, 255, 20, 0.1);
+    color: var(--accent-neon);
+    border-color: var(--accent-neon);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.85rem;
+  }
+
+  .grid .card {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  /* Sidebar Styles */
+  .sidebar {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    padding-right: 2px; /* prevent content clipping */
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .sidebar-title {
+    margin-bottom: 0.8rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.4rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+  }
+
+  .profiles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .profile-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 6px;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+
+  .profile-card:hover {
+    transform: translateX(4px);
+    border-color: var(--accent-neon);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #1e1e1e;
+    color: var(--accent-neon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(57, 255, 20, 0.2);
+  }
+
+  .profile-meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profile-meta .name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .profile-meta .role {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    line-height: 1.2;
+  }
+
+  .profile-meta .project {
+    margin-top: 0.15rem;
+    font-size: 0.6rem;
+    color: var(--accent-neon);
+    font-family: var(--font-mono);
+    opacity: 0.85;
+  }
+
+  .sidebar-spacer {
+    height: 2.5rem;
+  }
+
+  .stacks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stack-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+  }
+
+  .stack-icon {
+    font-size: 1.2rem;
+  }
+
+  .stack-meta {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stack-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .stack-usage {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.1rem;
+  }
+
+  .spotlight-card {
+    display: block;
+    padding: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    /* Deep black */
+    background: linear-gradient(160deg, #0d0d0d 0%, #080808 40%, #060606 100%);
+    border: 1px solid #222222;
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.05) inset,
+      0 -1px 0 0 rgba(0,0,0,0.8) inset,
+      0 2px 10px rgba(0,0,0,0.5);
+  }
+
+  .spotlight-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 50%, transparent);
+    pointer-events: none;
+  }
+
+  .spotlight-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.04) 50%, transparent);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+
+  .spotlight-card:hover {
+    transform: translateY(-2px);
+    border-color: #333333;
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.08) inset,
+      0 8px 24px rgba(0,0,0,0.6);
+  }
+
+  .spotlight-card:hover::after {
+    left: 125%;
+  }
+
+  .spotlight-badge {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(57, 255, 20, 0.1);
+    color: var(--accent-neon);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .spotlight-card h4 {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .spotlight-card p {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 0.75rem;
+  }
+
+  .spotlight-link {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--accent-neon);
+  }
+
+  /* Expansion Grid */
+  .pb-section {
+    padding-bottom: 6rem;
+  }
+
+  .expansion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    .expansion-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .exp-title {
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+
+  .exp-link {
+    font-size: 0.75rem;
+    color: var(--accent-neon);
+    font-weight: 600;
+  }
+
+  .exp-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .exp-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+
+    /* Deep black finish */
+    background: linear-gradient(160deg, #0d0d0d 0%, #080808 40%, #0a0a0a 70%, #060606 100%);
+    border: 1px solid #222222;
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.05) inset,
+      0 -1px 0 0 rgba(0,0,0,0.8) inset,
+      0 2px 10px rgba(0,0,0,0.5);
+  }
+
+  /* Top catch-light */
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.12) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Shimmer sweep */
+  .exp-item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -75%;
+    width: 50%; height: 100%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+
+  .exp-item:hover {
+    transform: translateY(-2px);
+    border-color: #333333;
+    box-shadow:
+      0 1px 0 0 rgba(255,255,255,0.08) inset,
+      0 -1px 0 0 rgba(0,0,0,0.9) inset,
+      0 8px 24px rgba(0,0,0,0.6);
+  }
+
+  .exp-item:hover::after {
+    left: 125%;
+  }
+
+  .exp-badge {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .exp-badge.alpha { background: rgba(255, 99, 71, 0.1); color: #ff6347; }
+  .exp-badge.beta { background: rgba(255, 215, 0, 0.1); color: #ffd700; }
+  .exp-badge.stable { background: rgba(57, 255, 20, 0.1); color: var(--accent-neon); }
+
+  .exp-text h4 {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 0.2rem;
+  }
+
+  .exp-text p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .stack-variant {
+    align-items: center;
+  }
+
+  .stack-icons {
+    font-size: 1.5rem;
+    letter-spacing: -0.1em;
+  }
+
+  /* Leaderboard Column */
+  .leaderboard {
+    gap: 0;
+  }
+
+  .lb-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px dashed var(--border-color);
+  }
+
+  .lb-item:last-child {
+    border-bottom: none;
+  }
+
+  .lb-rank {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-neon);
+    width: 20px;
+  }
+
+  .lb-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: block;
+  }
+
+  .lb-detail {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>

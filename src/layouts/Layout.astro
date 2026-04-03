@@ -1,0 +1,193 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="A curated directory of open source projects and tools." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <!-- Modern web font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <header class="glass-panel site-header">
+      <div class="container header-content">
+        <a href="/" class="logo">
+          <span class="logo-icon">▲</span>
+          <span class="logo-text">Lib<span class="accent">OS</span></span>
+        </a>
+        <nav class="main-nav">
+          <a href="/">Explore</a>
+          <a href="/top-rated">Leaderboard</a>
+          <a href="/trending">Trending</a>
+          <a href="/submit">Submit</a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <span class="logo-icon">▲</span>
+            <span class="logo-text">Lib<span class="accent">OS</span></span>
+          </div>
+          <p class="footer-desc">A curated directory of open-source projects, modern frameworks, and AI workflows.</p>
+        </div>
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>Explore</h4>
+            <a href="/">Directory</a>
+            <a href="/top-rated">Leaderboard</a>
+            <a href="/trending">Trending</a>
+            <a href="/submit">Submit</a>
+          </div>
+          <div class="link-group">
+            <h4>Connect</h4>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer">Community</a>
+          </div>
+        </div>
+      </div>
+      <div class="container footer-bottom">
+        <p>&copy; {new Date().getFullYear()} LibOS. Minimum aesthetics, maximum performance.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0.75rem;
+    z-index: 100;
+    max-width: 1400px;
+    width: calc(100% - 3rem);
+    margin: 0.75rem auto;
+    border-radius: 12px;
+    padding: 0.85rem 1.5rem;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .logo-icon {
+    color: var(--accent-neon);
+  }
+
+  .logo-text .accent {
+    color: var(--text-secondary);
+  }
+
+  .main-nav {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .main-nav a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .main-nav a:hover {
+    color: var(--text-primary);
+  }
+
+  main {
+    min-height: calc(100vh - 150px);
+  }
+
+  .site-footer {
+    padding: 4rem 0 2rem;
+    background: #0a0a0a;
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+  }
+
+  .footer-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand {
+    max-width: 300px;
+  }
+
+  .footer-brand .logo {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-desc {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 4rem;
+  }
+
+  .link-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .link-group h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    margin-bottom: 0.3rem;
+  }
+
+  .link-group a {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+
+  .link-group a:hover {
+    color: var(--accent-neon);
+  }
+
+  .footer-bottom {
+    text-align: left;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+  }
+</style>

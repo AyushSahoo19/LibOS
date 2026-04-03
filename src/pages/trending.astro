@@ -1,0 +1,182 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/Card.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch entries and sort by highest 'stars' to simulate trending
+let allEntries = await getCollection('library');
+allEntries.sort((a, b) => (b.data.stars || 0) - (a.data.stars || 0));
+
+const trendingProfiles = [
+  { name: "Linus Torvalds", focus: "Kernel / Git", impact: "Legendary" },
+  { name: "Ilya Sutskever", focus: "Deep Learning / SSI", impact: "Pioneer" },
+  { name: "Peter Shor", focus: "Quantum Algorithms", impact: "Visionary" },
+  { name: "Jim Simons", focus: "Quant Trading", impact: "Titan" },
+  { name: "Evan You", focus: "Vue / Vite", impact: "Sovereign" },
+  { name: "Demis Hassabis", focus: "AI / Chemistry", impact: "Nobel" }
+];
+---
+
+<Layout title="Trending | LibOS">
+  <div class="container page-wrapper">
+    <header class="page-header">
+      <h1 class="title-glow text-gradient">Trending Ecosystems</h1>
+      <p class="subtitle">Discover the most highly adopted frameworks, fastest growing tools, and the top profiles pioneering the modern web layer this week.</p>
+    </header>
+
+    <section class="trending-profiles mb-section">
+      <h2 class="section-title">
+        <span class="neon-icon">⚡</span> 
+        Profiles of the Week
+      </h2>
+      <div class="profiles-grid">
+        {trendingProfiles.map((prof) => (
+          <div class="trending-profile-card glass-panel">
+            <div class="tp-header">
+              <div class="tp-avatar">{prof.name.charAt(0)}</div>
+              <div>
+                <h3 class="tp-name">{prof.name}</h3>
+                <span class="tp-focus">{prof.focus}</span>
+              </div>
+            </div>
+            <div class="tp-impact">Status: {prof.impact}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="trending-repos">
+       <h2 class="section-title">
+        <span class="neon-icon">🔥</span> 
+        Top Starred Resources
+      </h2>
+      <div class="grid">
+        {allEntries.map((entry) => (
+          <Card 
+            title={entry.data.title}
+            description={entry.data.description}
+            domain={entry.data.domain}
+            slug={entry.id || entry.slug}
+            stars={entry.data.stars}
+          />
+        ))}
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style is:global>
+  .page-wrapper {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  .page-header {
+    text-align: left;
+    margin-bottom: 3rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .neon-icon {
+    filter: drop-shadow(0 0 8px var(--accent-glow));
+  }
+
+  .mb-section {
+    margin-bottom: 5rem;
+  }
+
+  /* Trending Profiles Grid */
+  .profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .trending-profile-card {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    cursor: default;
+    border-radius: 6px;
+  }
+
+  .trending-profile-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-neon);
+    box-shadow: 0 4px 15px rgba(57, 255, 20, 0.08);
+  }
+
+  .tp-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tp-avatar {
+    width: 36px;
+    height: 36px;
+    background: #111;
+    border: 1px solid var(--accent-neon);
+    color: var(--accent-neon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.9rem;
+  }
+
+  .tp-name {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    margin-bottom: 0.1rem;
+    font-weight: 600;
+  }
+
+  .tp-focus {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tp-impact {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent-neon);
+    padding-top: 0.5rem;
+    border-top: 1px dotted var(--border-color);
+  }
+
+  /* Library Grid (Recycled styles from index) */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.85rem;
+  }
+</style>

@@ -1,0 +1,205 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const stacks = [
+  {
+    name: "The T3 Stack",
+    description: "The premier way to build robust, full-stack, type-safe Next.js applications.",
+    icons: "⚛️ + 🚀 + 🔷",
+    techs: ["Next.js", "TypeScript", "Tailwind CSS", "tRPC", "Prisma"],
+    why: "End-to-end type safety from the database straight through to the frontend UI without compiling GraphQL boundaries.",
+    usage: "Heavy Web Apps"
+  },
+  {
+    name: "Python Intelligence",
+    description: "The standard workflow for heavy data-ops, scientific compute, and raw algorithmic trading execution.",
+    icons: "🐍 + 📈 + 🧠",
+    techs: ["Python 3.12", "NumPy", "PyTorch", "Polars"],
+    why: "Brings native C/GPU speeds while providing analysts and quants with an unbeatably simple prototyping syntax.",
+    usage: "AI & Quant Finance"
+  },
+  {
+    name: "Supabase + Next.js",
+    description: "The absolute pinnacle of the modern Indie Hacker stack, allowing entire architectures to be built in a weekend.",
+    icons: "🐘 + ⚛️ + 🌐",
+    techs: ["Next.js (App Router)", "Supabase", "PostgreSQL", "Shadcn UI"],
+    why: "Supabase delivers native PostgreSQL with instant Auth, Edge Functions, and Realtime wrappers directly into Next.js server components effortlessly.",
+    usage: "SaaS Startups"
+  },
+  {
+    name: "Robotic Compute",
+    description: "The architecture running inside the brains of autonomous drones, robotic arms, and self-driving sub-systems.",
+    icons: "⚙️ + 🦀 + 📹",
+    techs: ["ROS 2", "C++ / Rust", "MuJoCo", "OpenCV"],
+    why: "Demands exact real-time execution kernels, 100% memory safety, and strict hardware-bridge protocols communicating instantaneously.",
+    usage: "Hardware & Automation"
+  }
+];
+---
+
+<Layout title="Tech Stacks | LibOS">
+  <div class="container page-wrapper">
+    <header class="page-header">
+      <h1 class="title-glow text-gradient">Tech Stacks</h1>
+      <p class="subtitle">Explore the architectural blueprints and combined synergies of the industry's most dominant technological workflows.</p>
+    </header>
+
+    <div class="stacks-grid">
+      {stacks.map((stack) => (
+        <div class="stack-card glass-panel">
+          <div class="sc-header">
+            <span class="sc-icons">{stack.icons}</span>
+            <span class="sc-usage">{stack.usage}</span>
+          </div>
+          
+          <h2 class="sc-name">{stack.name}</h2>
+          <p class="sc-desc">{stack.description}</p>
+          
+          <div class="sc-divider"></div>
+          
+          <h4 class="sc-section-title">Core Technologies</h4>
+          <div class="sc-techs">
+            {stack.techs.map(tech => (
+              <span class="tech-badge">{tech}</span>
+            ))}
+          </div>
+
+          <div class="sc-divider"></div>
+
+          <div class="sc-why">
+            <h4 class="sc-section-title">Why it's trending</h4>
+            <p>{stack.why}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .page-wrapper {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  .page-header {
+    text-align: left;
+    margin-bottom: 4rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+  }
+
+  .stacks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .stacks-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .stack-card {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .stack-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-neon);
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.05);
+  }
+
+  .sc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .sc-icons {
+    font-size: 2rem;
+    letter-spacing: -0.1em;
+  }
+
+  .sc-usage {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  .sc-name {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .sc-desc {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .sc-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 1.5rem 0;
+    width: 100%;
+  }
+
+  .sc-section-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .sc-techs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .tech-badge {
+    background: #111;
+    border: 1px solid var(--accent-neon);
+    color: var(--accent-neon);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+  }
+
+  .sc-why p {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    border-left: 3px solid var(--accent-neon);
+    padding-left: 1rem;
+  }
+</style>

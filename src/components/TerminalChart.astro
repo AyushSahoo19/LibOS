@@ -1,0 +1,214 @@
+---
+const metrics = [
+  { cat: "LANGUAGE",  name: "TypeScript",  pct: 98, color: "#39ff14" },
+  { cat: "FRAMEWORK", name: "Next.js",     pct: 85, color: "#00bfff" },
+  { cat: "LIBRARY",   name: "LangChain",   pct: 91, color: "#bf5af2" },
+  { cat: "WORKFLOW",  name: "Trunk Based", pct: 45, color: "#ff9f0a" },
+  { cat: "AI AGENT",  name: "Claude Code", pct: 78, color: "#ff6b6b" },
+];
+---
+
+<div class="tw">
+  <!-- title bar -->
+  <div class="tw-titlebar">
+    <div class="tw-dots">
+      <span style="background:#ff5f57;box-shadow:0 0 5px #ff5f5799"></span>
+      <span style="background:#febc2e;box-shadow:0 0 5px #febc2e99"></span>
+      <span style="background:#28c840;box-shadow:0 0 5px #28c84099"></span>
+    </div>
+    <p class="tw-title">sys@libos — ~/metrics — zsh</p>
+  </div>
+
+  <!-- body -->
+  <div class="tw-body">
+    <p class="tw-prompt"><span class="tw-ps">❯</span> run ecosystem --format=table</p>
+
+    <div class="tw-table">
+      <!-- header -->
+      <div class="tw-thead">
+        <span>CATEGORY</span>
+        <span>NAME</span>
+        <span>ADOPTION</span>
+        <span class="tw-align-r">PCT</span>
+      </div>
+
+      <!-- metric rows -->
+      {metrics.map((m) => (
+        <div class="tw-trow">
+          <span class="tw-cat" style={`color:${m.color}`}>{m.cat}</span>
+          <span class="tw-name">{m.name}</span>
+          <div class="tw-track">
+            <div class="tw-bar" style={`width:${m.pct}%;background:${m.color};box-shadow:0 0 6px ${m.color}55`}></div>
+          </div>
+          <span class="tw-pct" style={`color:${m.color}`}>{m.pct}%</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- footer -->
+    <div class="tw-footer">
+      <span>24 sources</span>
+      <span>·</span>
+      <span>1.2M queries/wk</span>
+      <span>·</span>
+      <span style="color:#39ff14">↑ 12% WoW</span>
+      <span class="tw-cur">█</span>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+.tw {
+  margin: 2rem auto 3rem;
+  max-width: 700px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #2c2c2c;
+  background: #161616;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+}
+
+/* title bar */
+.tw-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem 1rem;
+  background: #0f0f0f;
+  border-bottom: 1px solid #222;
+}
+
+.tw-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.tw-dots span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.tw-title {
+  font-size: 0.7rem;
+  color: #383838;
+  letter-spacing: 0.04em;
+  flex: 1;
+  text-align: center;
+}
+
+/* body */
+.tw-body {
+  padding: 1rem 1.25rem 1.15rem;
+}
+
+.tw-prompt {
+  font-size: 0.75rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.tw-ps { color: #39ff14; margin-right: 0.35rem; }
+
+/* table layout */
+.tw-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tw-thead {
+  display: grid;
+  grid-template-columns: 100px 110px 1fr 42px;
+  gap: 0.75rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: #2a2a2a;
+  text-transform: uppercase;
+  padding: 0 0.4rem 0.5rem;
+  border-bottom: 1px solid #1e1e1e;
+  margin-bottom: 0.4rem;
+}
+
+.tw-trow {
+  display: grid;
+  grid-template-columns: 100px 110px 1fr 42px;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.42rem 0.4rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.tw-trow:hover { background: rgba(255,255,255,0.03); }
+
+.tw-cat {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tw-name {
+  font-size: 0.79rem;
+  color: #777;
+  white-space: nowrap;
+}
+
+/* BAR */
+.tw-track {
+  width: 100%;
+  height: 6px;
+  background: #222;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.tw-bar {
+  height: 100%;
+  border-radius: 999px;
+  transform-origin: left center;
+  animation: tw-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tw-in {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.tw-pct {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tw-align-r { text-align: right; }
+
+/* footer */
+.tw-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #1e1e1e;
+  font-size: 0.65rem;
+  color: #2a2a2a;
+}
+
+.tw-cur {
+  margin-left: auto;
+  color: #39ff14;
+  animation: tw-blink 1s step-end infinite;
+}
+
+@keyframes tw-blink {
+  50% { opacity: 0; }
+}
+</style>

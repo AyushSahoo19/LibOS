@@ -1,0 +1,267 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('library');
+  return entries.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.title} | LibOS`}>
+  <div class="container article-container">
+    <div class="breadcrumbs">
+      <a href="/" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Library
+      </a>
+    </div>
+    
+    <header class="article-header">
+      <div class="header-top">
+        <span class="domain-tag">{entry.data.domain}</span>
+        {entry.data.stars && (
+          <div class="stars">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            {entry.data.stars > 999 ? (entry.data.stars/1000).toFixed(1) + 'k' : entry.data.stars}
+          </div>
+        )}
+      </div>
+      <h1 class="title-glow">{entry.data.title}</h1>
+      <p class="description">{entry.data.description}</p>
+      
+      <div class="tags-row">
+        {entry.data.tags?.map(tag => (
+          <span class="tech-tag">#{tag}</span>
+        ))}
+      </div>
+      
+      <div class="action-links">
+        {entry.data.links?.github && (
+          <a href={entry.data.links.github} target="_blank" rel="noopener noreferrer" class="btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            Repository
+          </a>
+        )}
+        {entry.data.links?.website && (
+          <a href={entry.data.links.website} target="_blank" rel="noopener noreferrer" class="btn-outline solid">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            Official Website
+          </a>
+        )}
+      </div>
+    </header>
+
+    <article class="markdown-content">
+      <Content />
+    </article>
+  </div>
+</Layout>
+
+<style>
+  .article-container {
+    max-width: 900px;
+    padding-top: 3rem;
+    padding-bottom: 6rem;
+  }
+
+  .breadcrumbs {
+    margin-bottom: 2rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .back-link:hover {
+    color: var(--accent-neon);
+    transform: translateX(-4px);
+  }
+
+  .article-header {
+    padding: 1rem 0 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .domain-tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-neon);
+    font-weight: 700;
+  }
+
+  .tags-row {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .tech-tag {
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  .stars {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #ffd700;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .article-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 750px;
+  }
+
+  .action-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: transparent;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .btn-outline.solid {
+    background: var(--text-primary);
+    color: var(--bg-color);
+    border-color: var(--text-primary);
+  }
+
+  .btn-outline.solid:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+  }
+
+  /* Deep Markdown Content Styling */
+  .markdown-content {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 800px;
+  }
+
+  .markdown-content :global(h2) {
+    color: var(--text-primary);
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dotted var(--border-color);
+  }
+
+  .markdown-content :global(h3) {
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .markdown-content :global(p) {
+    margin-bottom: 1.5rem;
+  }
+
+  .markdown-content :global(ul), .markdown-content :global(ol) {
+    margin-bottom: 2rem;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .markdown-content :global(li) {
+    position: relative;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  .markdown-content :global(li::before) {
+    content: "─";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--border-color);
+    font-weight: 400;
+  }
+
+  .markdown-content :global(li strong) {
+    color: #dedede;
+    margin-right: 0.3rem;
+    font-weight: 600;
+  }
+
+  .markdown-content :global(code:not(pre code)) {
+    background: var(--surface-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    color: var(--accent-neon);
+    border: 1px solid var(--border-color);
+  }
+
+  .markdown-content :global(pre) {
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+</style>

@@ -1,0 +1,267 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const releases = [
+  {
+    version: "React 19 RC",
+    status: "Alpha",
+    date: "A few days ago",
+    description: "The highly anticipated React compiler arrives natively bridging the gap between state rendering and heavy useMemo optimizations.",
+    details: [
+      "No more useMemo or useCallback requirements natively.",
+      "New Actions API for simpler data mutation handling.",
+      "Document metadata natively supported (<title>, <meta> tags in components)."
+    ],
+    github: "https://github.com/facebook/react"
+  },
+  {
+    version: "PyTorch 2.4",
+    status: "Stable",
+    date: "Last Week",
+    description: "Huge leap in performance across CPU execution with TorchInductor enhancements and AOT Autograd scaling.",
+    details: [
+      "TorchInductor optimizations targeting pure x86 CPU performance.",
+      "Python 3.12 support officially fully verified.",
+      "Custom kernel compiling with fewer overheads."
+    ],
+    github: "https://github.com/pytorch/pytorch"
+  },
+  {
+    version: "Next.js 15 RC",
+    status: "Beta",
+    date: "2 Weeks Ago",
+    description: "Vercel pushes Next.js to fully support React 19 RC while making the aggressive router caching strictly opt-in.",
+    details: [
+      "fetch caching is no longer aggressive by default.",
+      "Partial Prerendering (PPR) is heavily stabilized.",
+      "New next/after API for post-response execution."
+    ],
+    github: "https://github.com/vercel/next.js"
+  },
+  {
+    version: "Blender 4.2 LTS",
+    status: "Stable",
+    date: "Last Month",
+    description: "The new Long Term Support release completely overhauls EEVEE, introducing 'EEVEE Next' a vastly superior real-time render engine.",
+    details: [
+      "EEVEE Next replacing the legacy real-time rendering.",
+      "Raytracing enabled in viewport natively without Cycles.",
+      "Vastly improved extensions platform."
+    ],
+    github: "https://github.com/blender/blender"
+  }
+];
+
+const getStatusClass = (status: string) => {
+  if(status === 'Alpha') return 'alpha';
+  if(status === 'Beta') return 'beta';
+  return 'stable';
+};
+---
+
+<Layout title="Releases Timeline | LibOS">
+  <div class="container page-wrapper">
+    <header class="page-header">
+      <h1 class="title-glow text-gradient">Release Timeline</h1>
+      <p class="subtitle">Detailed architectural outlines and breakthrough updates from the highest tier open-source frameworks and engines.</p>
+    </header>
+
+    <div class="timeline">
+      {releases.map((release) => (
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass-panel">
+            <div class="release-header">
+              <div class="rh-left">
+                <h2>{release.version}</h2>
+                <span class={`status-badge ${getStatusClass(release.status)}`}>{release.status}</span>
+              </div>
+              <span class="release-date">{release.date}</span>
+            </div>
+            
+            <p class="release-desc">{release.description}</p>
+            
+            <div class="release-details">
+              <h4>Key Advancements:</h4>
+              <ul>
+                {release.details.map(detail => (
+                  <li>{detail}</li>
+                ))}
+              </ul>
+            </div>
+
+            <a href={release.github} target="_blank" rel="noopener noreferrer" class="repo-link">
+              Read Official Release Notes →
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .page-wrapper {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+    max-width: 900px;
+  }
+
+  .page-header {
+    text-align: left;
+    margin-bottom: 4rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+  }
+
+  /* Timeline Layout */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-neon), var(--border-color) 80%);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 4rem;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -2.35rem;
+    top: 1.5rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-color);
+    border: 3px solid var(--accent-neon);
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+
+  .timeline-content {
+    padding: 2rem;
+    border-radius: 12px;
+  }
+
+  .release-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .rh-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .rh-left h2 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .status-badge.alpha { background: rgba(255, 99, 71, 0.1); color: #ff6347; border: 1px solid rgba(255, 99, 71, 0.3); }
+  .status-badge.beta { background: rgba(255, 215, 0, 0.1); color: #ffd700; border: 1px solid rgba(255, 215, 0, 0.3); }
+  .status-badge.stable { background: rgba(57, 255, 20, 0.1); color: var(--accent-neon); border: 1px solid rgba(57, 255, 20, 0.3); }
+
+  .release-date {
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .release-desc {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+  }
+
+  .release-details {
+    background: rgba(0,0,0,0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 2px solid var(--border-color);
+    margin-bottom: 1.5rem;
+  }
+
+  .release-details h4 {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .release-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .release-details li {
+    position: relative;
+    padding-left: 1.25rem;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .release-details li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent-neon);
+  }
+
+  .repo-link {
+    display: inline-block;
+    color: var(--accent-neon);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
+
+  .repo-link:hover {
+    text-decoration: underline;
+  }
+</style>

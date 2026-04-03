@@ -1,0 +1,317 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+let allEntries = await getCollection('library');
+
+// Sort by stars descending to give them an initial "global rank"
+allEntries.sort((a, b) => (b.data.stars || 0) - (a.data.stars || 0));
+
+// Predefined domains for filtering
+const domains = ["Framework", "Tool", "Repository", "Workflow", "AI Agent", "Machine Learning", "Robotics", "Quantum Computing", "Physics Engine", "Chemistry", "Trading", "3D Software", "Library", "Math"];
+
+// Helper to format stars cleanly
+const formatStars = (stars: number) => {
+  if (stars >= 1000) {
+    return (stars / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return stars.toString();
+};
+---
+
+<Layout title="Top Rated | LibOS Leaderboard">
+  <div class="container page-wrapper">
+    <header class="page-header">
+      <h1 class="title-glow text-gradient">Global Leaderboard</h1>
+      <p class="subtitle">The definitive, dynamically ranked directory of the most critical open-source infrastructure running the modern world.</p>
+    </header>
+
+    <!-- Unified Filter Bar -->
+    <div class="filters-container">
+      <div class="filters" id="lb-filter-bar">
+        <button class="filter-btn active" data-filter="all">Global Top</button>
+        {domains.map((domain) => (
+          <button class="filter-btn" data-filter={domain.toLowerCase()}>{domain}s</button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Dynamic Leaderboard Table -->
+    <div class="leaderboard-grid">
+      <div class="leader-section">
+        <div class="lb-table">
+          <div class="lb-header">
+            <span class="col-rank">Rank</span>
+            <span class="col-name">Technology</span>
+            <span class="col-stars">Stars</span>
+            <span class="col-trend">Category</span>
+          </div>
+          
+          <div id="lb-body">
+            {allEntries.map((item, index) => (
+              <div class="lb-row" data-domain={item.data.domain.toLowerCase()}>
+                <span class="col-rank js-rank">{index + 1}</span>
+                <div class="col-name">
+                  <a href={`/library/${item.slug}`} class="tech-name">{item.data.title}</a>
+                  <span class="tech-focus">{item.data.description.substring(0, 75)}...</span>
+                </div>
+                <span class="col-stars">{formatStars(item.data.stars || 0)}</span>
+                <span class="col-trend tag">{item.data.domain}</span>
+              </div>
+            ))}
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="lb-empty-state" style="display:none">
+            <span class="empty-icon">⌀</span>
+            <p>No results found for this category.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const filterBar = document.getElementById('lb-filter-bar');
+  const emptyState = document.getElementById('lb-empty-state');
+  
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const rows = document.querySelectorAll<HTMLDivElement>('.lb-row');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const domain = row.dataset.domain || '';
+      const matchesDomain = activeFilter === 'all' || domain === activeFilter;
+
+      if (matchesDomain) {
+        row.style.display = '';
+        visibleCount++;
+        // Dynamically update the rank number based on filtered position
+        const rankSpan = row.querySelector('.js-rank');
+        if(rankSpan) rankSpan.textContent = visibleCount.toString();
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
+    }
+  }
+
+  // Filter functionality
+  filterBar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-btn');
+    if (!btn) return;
+
+    filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter || 'all';
+    applyFilters();
+  });
+
+  // Init
+  applyFilters();
+</script>
+
+<style>
+  .page-wrapper {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  .page-header {
+    text-align: left;
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 700px;
+  }
+
+  /* Filters */
+  .filters-container {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px dashed var(--border-color);
+  }
+
+  .filters {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+    background: var(--surface-hover);
+  }
+
+  .filter-btn.active {
+    background: rgba(57, 255, 20, 0.1);
+    color: var(--accent-neon);
+    border-color: var(--accent-neon);
+  }
+
+  /* Leaderboard Grid */
+  .leaderboard-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lb-table {
+    width: 100%;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .lb-header {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px 140px;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    font-weight: 600;
+  }
+
+  .lb-row {
+    display: grid;
+    grid-template-columns: 80px 1fr 100px 140px;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+    transition: background 0.2s ease;
+  }
+
+  .lb-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .lb-row:last-child {
+    border-bottom: none;
+  }
+
+  .col-rank {
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  /* Dynamic CSS overrides for top 3 visual ranks handled naturally */
+  .lb-row[style*="display: none"] {
+    /* don't style hidden rows if possible */
+  }
+
+  /* Styling rank 1, 2, 3 dynamically is tricky in CSS with filtered rows. 
+     Instead we rely on the JS calculating the absolute position and we could apply classes if needed, 
+     but standard text layout is cleaner. */
+
+  .col-name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .tech-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .tech-name:hover {
+    color: var(--accent-neon);
+  }
+
+  .tech-focus {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+
+  .col-stars {
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .col-trend.tag {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    display: inline-block;
+    text-align: center;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  @media (max-width: 600px) {
+    .lb-header, .lb-row {
+      grid-template-columns: 50px 1fr 60px;
+    }
+    .col-trend { display: none; }
+    .lb-header .col-trend { display: none; }
+  }
+</style>
