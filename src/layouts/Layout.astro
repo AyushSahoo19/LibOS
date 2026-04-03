@@ -26,13 +26,19 @@ const { title } = Astro.props;
           <span class="logo-icon">▲</span>
           <span class="logo-text">Lib<span class="accent">OS</span></span>
         </a>
-        <nav class="main-nav">
+        <nav class="main-nav" id="main-nav">
           <a href="/">Explore</a>
           <a href="/top-rated">Leaderboard</a>
           <a href="/trending">Trending</a>
           <a href="/submit">Submit</a>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/AyushSahoo19/LibOS" target="_blank" rel="noopener noreferrer">GitHub</a>
         </nav>
+        <!-- Hamburger button — only visible on mobile -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
 
@@ -71,6 +77,26 @@ const { title } = Astro.props;
     </footer>
   </body>
 </html>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const nav = document.getElementById('main-nav');
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = nav?.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // Close menu when a link is clicked
+  nav?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      hamburger?.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
 
 <style>
   .site-header {
@@ -192,20 +218,83 @@ const { title } = Astro.props;
   }
 
   /* ─── Mobile Responsiveness ─────────────────────────────── */
+
+  /* Hamburger button — hidden on desktop */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-secondary);
+    border-radius: 2px;
+    transition: all 0.25s ease;
+    transform-origin: center;
+  }
+
+  /* Animated X state */
+  .hamburger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .hamburger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
   @media (max-width: 640px) {
-    /* Navbar: tighten and wrap links on small screens */
+    /* Navbar container */
     .site-header {
       width: calc(100% - 1.5rem);
       padding: 0.75rem 1rem;
+      border-radius: 10px;
+    }
+
+    /* Show hamburger, hide desktop nav */
+    .hamburger {
+      display: flex;
     }
 
     .main-nav {
-      gap: 0.85rem;
-      flex-wrap: wrap;
+      display: none;
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(10, 10, 10, 0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.5rem 0;
+      z-index: 200;
+    }
+
+    .main-nav.open {
+      display: flex;
     }
 
     .main-nav a {
-      font-size: 0.78rem;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+    }
+
+    .main-nav a:last-child {
+      border-bottom: none;
     }
 
     /* Footer: stack columns vertically */
