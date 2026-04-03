@@ -888,4 +888,60 @@ const trendingStacks = [
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
+
+  /* ─── Mobile Responsiveness ─────────────────────────────── */
+  @media (max-width: 640px) {
+    /* Hero */
+    .hero {
+      padding: 4rem 0 3rem;
+    }
+
+    .hero-content h1 {
+      font-size: 2.4rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+
+    .hero-glow {
+      width: 280px;
+      height: 200px;
+    }
+
+    /* Card grid: single column on mobile */
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* Expansion previews: single column already handled at 900px,
+       but tighten gap further on phones */
+    .expansion-grid {
+      gap: 2.5rem;
+    }
+
+    .exp-header {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* Remove sidebar on very small screens */
+    .layout-split {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      display: none;
+    }
+
+    /* Leaderboard mini preview */
+    .lb-item {
+      padding: 0.65rem 0.75rem;
+    }
+
+    /* Section label */
+    .metrics-label-text {
+      font-size: 0.55rem;
+    }
+  }
 </style>

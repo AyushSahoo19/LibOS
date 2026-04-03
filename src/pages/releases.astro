@@ -264,4 +264,16 @@ const getStatusClass = (status: string) => {
   .repo-link:hover {
     text-decoration: underline;
   }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 640px) {
+    .page-header h1 { font-size: 2rem; }
+    .subtitle { font-size: 0.95rem; }
+    .timeline { padding-left: 1.25rem; }
+    .timeline-marker { left: -1.6rem; }
+    .timeline-content { padding: 1.25rem; }
+    .rh-left h2 { font-size: 1.3rem; }
+    .release-desc { font-size: 0.95rem; }
+    .release-details { padding: 1rem; }
+  }
 </style>

@@ -97,3 +97,10 @@ pre {
   font-family: var(--font-mono);
   font-size: 0.9rem;
 }
+
+/* ─── Mobile Responsiveness ─────────────────────────────── */
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
