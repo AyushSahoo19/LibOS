@@ -124,7 +124,7 @@ const stacks = [
   .stack-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent-neon);
-    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.05);
+    box-shadow: var(--card-shadow);
   }
 
   .sc-header {
@@ -143,7 +143,7 @@ const stacks = [
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-hover);
     padding: 0.3rem 0.8rem;
     border-radius: 999px;
     color: var(--text-secondary);
@@ -186,7 +186,7 @@ const stacks = [
   }
 
   .tech-badge {
-    background: #111;
+    background: var(--surface-hover);
     border: 1px solid var(--accent-neon);
     color: var(--accent-neon);
     font-family: var(--font-mono);

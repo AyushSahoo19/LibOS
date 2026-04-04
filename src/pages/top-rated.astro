@@ -205,13 +205,17 @@ const formatStars = (stars: number) => {
     display: grid;
     grid-template-columns: 80px 1fr 100px 140px;
     padding: 1rem 1.5rem;
-    background: rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: 2px solid var(--border-color);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-secondary);
     font-weight: 600;
+  }
+
+  :global([data-theme="light"]) .lb-header {
+    background: rgba(0, 0, 0, 0.02);
   }
 
   .lb-row {
@@ -224,7 +228,7 @@ const formatStars = (stars: number) => {
   }
 
   .lb-row:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface-hover);
   }
 
   .lb-row:last-child {
@@ -280,7 +284,7 @@ const formatStars = (stars: number) => {
     font-size: 0.65rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-hover);
     color: var(--text-secondary);
     padding: 0.3rem 0.6rem;
     border-radius: 4px;
