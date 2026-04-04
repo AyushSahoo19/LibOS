@@ -7,14 +7,15 @@ LibOS is a minimalistic, curated, and premium web directory designed for develop
 - **Framework**: Astro (v6.x) + Vanilla CSS
 - **Content Approach**: Markdown files managed via Astro Collections.
 
-## Design Philosophy "Deep Black Metallic & Minimal"
-- **Theme**: Ultra-premium deep black mode (`#0d0d0d` piano-lacquer finish).
+## Design Philosophy "Metallic Contrast & Minimal"
+- **Theme**: Ultra-premium dual-mode system (Dark: "Deep Black", Light: "Silver/Platinum").
 - **Aesthetics**: 
   - **Metallic Cards**: Linear gradients, razor-thin silver edges, and top-edge catch-lights.
+  - **Silver Mode**: A polished platinum finish (`#f8f8fa`) as a counterpart to the piano-lacquer black.
   - **Interactions**: Hover shimmer sweeps, vertical timeline markers, and glowing status badges.
-  - **Layout**: Floating sticky navbar with proper screen gutters, two-column main layout with independently scrollable sidebar.
+  - **Layout**: Floating sticky navbar with themed glass panels (`--glass-bg`), two-column main layout.
 - **Typography**: `Inter` (Body) + `Fira Code` (Technical/Mono).
-- **Mobile First**: Fully responsive with a minimalist hamburger menu toggle for small screens.
+- **Theme Native**: Persistent theme switching via a clean Sun/Moon UI with `localStorage` memory.
 
 ## Content Structure
 Located in `src/content/library/`
@@ -46,11 +47,12 @@ A brief introduction pointing out why it exists.
 ```
 
 ## Features & Pages
-1. **Directory Hub (`/`)**: Main search and filter interface with the deep black metallic card grid.
-2. **Global Leaderboard (`/top-rated`)**: Dynamic ranking of all libraries sorted by star counts, with category-specific filtering.
-3. **Release Timeline (`/releases`)**: Architectural tracking of major version releases with status badges (Alpha/Beta/Stable).
+1. **Directory Hub (`/`)**: Main search and filter interface with theme-aware metallic cards.
+2. **Global Leaderboard (`/top-rated`)**: Dynamic ranking of all libraries sorted by star counts, category-specific filtering, and silver/dark mode support.
+3. **Release Timeline (`/releases`)**: Architectural tracking of major version releases with themed status badges.
 4. **Tech Stacks (`/stacks`)**: Visual breakdown of architectural synergies (e.g., Python + MuJoCo).
-5. **Trending (`/trending`)**: Highlights of top repositories and legendary open-source innovators.
+5. **Theme Engine**: Persistent Black & White (Silver/Platinum) toggle using CCS variables and `localStorage`.
+6. **Mobile First**: Fully responsive with a minimalist hamburger menu and high-contrast mobile navigation.
 
 ## Domains & Categories
 LibOS covers a vast scientific and technical landscape:
