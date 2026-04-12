@@ -33,7 +33,7 @@
 
 **LibOS** is a high-performance, minimalist developer hub that curates and indexes the **absolute best open-source projects** running the modern world — from web frameworks and AI tools to robotics stacks, quantum computing SDKs, physics engines, trading algorithms, chemistry libraries, and 3D software.
 
-It serves as a **living directory** — continuously updated with new releases, tracked global rankings, and detailed architectural breakdowns of the most impactful technologies across every domain of computing and science.
+It serves as a **living directory** — continuously updated with new releases, tracked global rankings, and deeply curated [Collections](file:///src/pages/collections/index.astro) of the most impactful technologies across every domain of computing and science.
 
 > *Think of it as a curated Wikipedia meets GitHub Explore, but specifically designed for developers who want signal without the noise.*
 
@@ -63,9 +63,24 @@ LibOS is organized around a **multi-domain taxonomy** covering every major field
 ## ✨ Features
 
 ### 📂 Curated Directory
-- **37+ handpicked repositories** spanning all major domains of computing.
+- **100+ handpicked repositories** spanning all major domains of computing.
 - Each entry includes: title, description, domain tag, star count, GitHub link, use cases, and technical breakdowns.
 - Search and filter by domain in real-time with instant results.
+
+### 🗂️ Curated Collections Hub (`/collections`)
+- **7 specialized collections** focused on distinct engineering paths:
+    - **Design & Video Coding** — From Three.js to R3F.
+    - **Claude Skills** — Specialized subagent and skill definitions.
+    - **AI Mastery & Agents** — Autonomous agents and LLM frameworks.
+    - **Blockchain Tools** — Ethereum/Solana developer stacks.
+    - **Learning & Skills** — Roadmaps and deep-dive technical resources.
+    - **AI Frameworks** — Core ML tools like PyTorch and Jax.
+    - **Open Source Tools** — Essential developer utilities.
+
+### 🏎️ Interactive Scroll Gallery
+- Animated, infinite-scrolling "Best Collections" gallery on the homepage.
+- **Universal Scroll Architecture**: Support for mouse-dragging, horizontal trackpad "sliding", and native vertical page scrolling while hovering.
+- "Pause-on-Hover" interaction logic for effortless browsing.
 
 ### 🗂️ Advanced Filtering
 - Single-row **horizontal scrollable filter bar** with all domain categories.
@@ -144,27 +159,24 @@ npm run preview
 
 ```
 LibOS/
-├── public/                  # Static assets
 ├── src/
 │   ├── components/
-│   │   ├── Card.astro       # Repository card component (metallic design)
+│   │   ├── Card.astro       # Repository card component
 │   │   └── TerminalChart.astro  # Ecosystem Pulse visualization
 │   ├── content/
-│   │   └── library/         # Markdown files for each repository entry
+│   │   ├── library/         # 100+ repository markdown entries
+│   │   └── collections/     # Metadata for curated collections
 │   ├── layouts/
 │   │   └── Layout.astro     # Global layout with nav + footer
 │   ├── pages/
-│   │   ├── index.astro      # Main directory hub
+│   │   ├── index.astro      # Main directory hub + Hero Scroller
+│   │   ├── collections/     # Collections listing & dynamic detail routes
 │   │   ├── trending.astro   # Trending repositories
 │   │   ├── top-rated.astro  # Global leaderboard
-│   │   ├── releases.astro   # Release timeline
-│   │   ├── stacks.astro     # Tech stacks explorer
-│   │   └── library/
-│   │       └── [...slug].astro  # Dynamic detail pages
+│   │   └── ...
 │   └── styles/
 │       └── global.css       # Global design tokens
 ├── astro.config.mjs
-├── package.json
 └── README.md
 ```
 
@@ -181,6 +193,7 @@ Create a new file: `src/content/library/your-repo.md`
 title: "Your Repo Name"
 description: "A one-line description of what it does."
 domain: "Framework" # e.g., Tool, Library, AI Agent, Robotics, etc.
+collection: "ai-frameworks" # The collection ID it belongs to (optional)
 stars: 12500
 links:
   github: "https://github.com/owner/repo"
