@@ -5,6 +5,13 @@ import TerminalChart from '../components/TerminalChart.astro';
 import { getCollection } from 'astro:content';
 
 const allEntries = await getCollection('library');
+const collections = await getCollection('collections');
+
+// Calculate repo counts per collection
+const collectionCounts = collections.reduce((acc, col) => {
+  acc[col.id] = allEntries.filter(entry => entry.data.collection === col.id).length;
+  return acc;
+}, {} as Record<string, number>);
 
 // Predefined domains for a structured filter experience
 const domains = ["Framework", "Tool", "Repository", "Workflow", "AI Agent", "Machine Learning", "Robotics", "Quantum Computing", "Physics Engine", "Chemistry", "Trading", "3D Software", "Library", "Math"];
@@ -37,6 +44,30 @@ const trendingStacks = [
       <div class="search-bar">
         <input id="search-input" type="text" placeholder="Search repos, tools, frameworks…" class="glass-input" autocomplete="off" />
         <button class="btn-primary" id="search-clear" aria-label="Clear">✕</button>
+      </div>
+
+      <div class="best-collections">
+        <span class="bc-label">Curated Collections</span>
+        <div class="bc-scroll-wrapper">
+          <div class="bc-list">
+            {[...collections, ...collections].map(col => (
+              <a href={`/collections/${col.id}`} class="bc-card">
+                <div class="bc-card-inner">
+                  <div class="bc-card-header">
+                    <svg class="bc-github-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+                    <span class="bc-badge">Collection</span>
+                  </div>
+                  <div class="bc-card-body">
+                    <span class="bc-title">{col.data.title}</span>
+                    <div class="bc-meta">
+                      <span class="bc-count-text">{collectionCounts[col.id] || 0} Repositories</span>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -285,8 +316,84 @@ const trendingStacks = [
     applyFilters();
   });
 
-  // Init — dim clear button
+  // Best Collections Interactive Scroller (Native Scroll Edition)
+  const setupCollectionScroller = () => {
+    const wrapper = document.querySelector('.bc-scroll-wrapper');
+    const list = document.querySelector('.bc-list');
+    if (!wrapper || !list) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isHovered = false;
+    let animationId;
+
+    // Auto-scroll speed (pixels per frame)
+    const speed = 0.5; 
+
+    const scroll = () => {
+      if (!isDown && !isHovered) {
+        wrapper.scrollLeft += speed;
+        
+        // Native "Teleport" Loop
+        // Since we duplicated items, we reset when we pass the first set
+        const halfWidth = list.scrollWidth / 2;
+        if (wrapper.scrollLeft >= halfWidth) {
+          wrapper.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(scroll);
+    };
+
+    // Start auto-scroll
+    scroll();
+
+    // Mouse Events for Drag
+    wrapper.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - wrapper.offsetLeft;
+      scrollLeft = wrapper.scrollLeft;
+      wrapper.classList.add('grabbing');
+    });
+
+    wrapper.addEventListener('mouseleave', () => {
+      isDown = false;
+      isHovered = false;
+      wrapper.classList.remove('grabbing');
+    });
+
+    wrapper.addEventListener('mouseenter', () => {
+      isHovered = true;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDown = false;
+      wrapper.classList.remove('grabbing');
+    });
+
+    // Native wheel support is built-in, no need for manual translate
+    // We only need to handle the infinite loop during manual sliding/scrolling
+    wrapper.addEventListener('scroll', () => {
+      const halfWidth = list.scrollWidth / 2;
+      if (wrapper.scrollLeft >= halfWidth) {
+        wrapper.scrollLeft = 1; // 1 instead of 0 to avoid jitter
+      } else if (wrapper.scrollLeft <= 0) {
+        wrapper.scrollLeft = halfWidth - 1;
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - wrapper.offsetLeft;
+      const walk = (x - startX) * 1.5; // multiplier for drag sensitivity
+      wrapper.scrollLeft = scrollLeft - walk;
+    });
+  };
+
+  // Initialize all client-side logic
   applyFilters();
+  setupCollectionScroller();
 </script>
 
 <style is:global>
@@ -388,6 +495,180 @@ const trendingStacks = [
   .btn-primary:hover {
     color: var(--text-primary);
     border-color: var(--text-secondary);
+  }
+
+  /* Best Collections Refined */
+  .best-collections {
+    margin-top: 4rem;
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    animation: slideFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+    overflow: hidden;
+  }
+
+  .bc-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    margin-bottom: 2rem;
+    text-align: center;
+    opacity: 0.6;
+  }
+
+  .bc-scroll-wrapper {
+    width: 100%;
+    position: relative;
+    padding: 2rem 0;
+    overflow-x: auto;
+    cursor: grab;
+    user-select: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .bc-scroll-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .bc-scroll-wrapper.grabbing {
+    cursor: grabbing;
+  }
+
+  /* Fade edges for the scroll list */
+  .bc-scroll-wrapper::before,
+  .bc-scroll-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 150px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .bc-scroll-wrapper::before {
+    left: 0;
+    background: linear-gradient(90deg, var(--bg-primary) 0%, transparent 100%);
+  }
+
+  .bc-scroll-wrapper::after {
+    right: 0;
+    background: linear-gradient(-90deg, var(--bg-primary) 0%, transparent 100%);
+  }
+
+  .bc-list {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    padding: 0 150px; /* Buffer for fade edges */
+  }
+
+  /* We will handle animation in JS for drag compatibility */
+
+  .bc-card {
+    display: block;
+    width: 240px;
+    height: 140px;
+    text-decoration: none;
+    position: relative;
+    border-radius: 12px;
+    padding: 1px; /* Border shim */
+    background: var(--border-metal);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--card-shadow);
+  }
+
+  .bc-card-inner {
+    height: 100%;
+    padding: 1.5rem;
+    background: var(--surface-card);
+    border-radius: 11px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Professional Micro-Texture (Subtle Grain) */
+  .bc-card-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .bc-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 20px 40px -15px rgba(0,0,0,0.6),
+      0 0 20px -5px rgba(57, 255, 20, 0.15);
+    background: var(--accent-neon);
+  }
+
+  .bc-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .bc-github-icon {
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+  }
+
+  .bc-badge {
+    font-size: 0.55rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .bc-card:hover .bc-github-icon {
+    color: var(--accent-neon);
+  }
+
+  .bc-card:hover .bc-badge {
+    border-color: var(--accent-neon);
+    color: var(--accent-neon);
+  }
+
+  .bc-card-body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .bc-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .bc-count-text {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+
+  .bc-card:hover .bc-title {
+    color: var(--text-primary);
   }
 
   /* Metrics section */

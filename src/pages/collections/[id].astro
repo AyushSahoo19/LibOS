@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const collections = await getCollection('collections');
+  return collections.map(col => ({
+    params: { id: col.id },
+    props: { collection: col },
+  }));
+}
+
+const { collection } = Astro.props;
+const allLibraryEntries = await getCollection('library');
+const entries = allLibraryEntries.filter(entry => entry.data.collection === collection.id);
+---
+
+<Layout title={`${collection.data.title} | LibOS`}>
+  <section class="hero relative">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <div class="breadcrumb">
+        <a href="/collections">Collections</a> / <span>{collection.data.title}</span>
+      </div>
+      <div class="col-icon-large">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+      </div>
+      <h1 class="title-glow text-gradient">{collection.data.title}</h1>
+      <p class="subtitle">{collection.data.description}</p>
+    </div>
+  </section>
+
+  <section class="container library-grid">
+    <div class="grid-header">
+      <h2 class="results-count">{entries.length} items found</h2>
+    </div>
+    
+    {entries.length > 0 ? (
+      <div class="grid">
+        {entries.map((entry) => (
+          <Card 
+            title={entry.data.title}
+            description={entry.data.description}
+            domain={entry.data.domain}
+            slug={entry.id}
+            stars={entry.data.stars}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <span class="empty-icon">⌀</span>
+        <p>No items added to this collection yet.</p>
+        <a href="/" class="btn-outline">Explore Directory</a>
+      </div>
+    )}
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    padding: 5rem 0 3rem;
+    text-align: center;
+  }
+
+  .breadcrumb {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-family: var(--font-mono);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-neon);
+  }
+
+  .col-icon-large {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 20px rgba(57, 255, 20, 0.3));
+  }
+
+  .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .results-count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    padding-bottom: 6rem;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    gap: 1.5rem;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    opacity: 0.2;
+  }
+
+  .btn-outline {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent-neon);
+    color: var(--accent-neon);
+    background: rgba(57, 255, 20, 0.05);
+  }
+</style>

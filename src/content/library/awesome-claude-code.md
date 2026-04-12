@@ -2,6 +2,7 @@
 title: "Awesome Claude Code"
 description: "Curated list of every high-quality skill, hook, slash-command, and orchestrator for Claude Code. The single best starting point for the ecosystem."
 domain: "Repository"
+collection: "claude-skills"
 stars: 4200
 links:
   github: "https://github.com/hesreallyhim/awesome-claude-code"

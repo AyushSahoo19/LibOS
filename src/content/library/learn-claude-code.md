@@ -2,6 +2,7 @@
 title: "Learn Claude Code"
 description: "A 12-session course: build an agent harness from scratch — subagents, context isolation, lazy knowledge injection, and memory consolidation."
 domain: "Repository"
+collection: "claude-skills"
 stars: 1400
 links:
   github: "https://github.com/shareAI-lab/learn-claude-code"

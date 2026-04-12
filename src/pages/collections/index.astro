@@ -1,0 +1,239 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const collections = await getCollection('collections');
+const libraryEntries = await getCollection('library');
+
+// Count items in each collection
+const collectionCounts = collections.reduce((acc, col) => {
+  acc[col.id] = libraryEntries.filter(entry => entry.data.collection === col.id).length;
+  return acc;
+}, {} as Record<string, number>);
+---
+
+<Layout title="Collections | LibOS">
+  <section class="hero relative">
+    <div class="hero-glow"></div>
+    <div class="container hero-content">
+      <h1 class="title-glow text-gradient">Curated Collections</h1>
+      <p class="subtitle">Deeply curated groupings of the best tools and repositories, organized by domain and utility.</p>
+    </div>
+  </section>
+
+  <section class="container collections-grid">
+    <div class="grid">
+      {collections.map((col) => (
+        <a href={`/collections/${col.id}`} class="collection-card">
+          <div class="card-glow"></div>
+          <div class="card-inner">
+            <div class="col-icon-wrap">
+              <svg class="bg-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+            </div>
+            <div class="col-content">
+              <div class="col-badge">{collectionCounts[col.id] || 0} Repos</div>
+              <h3>{col.data.title}</h3>
+              <p>{col.data.description}</p>
+              <div class="col-footer">
+                <span class="explore-btn">
+                  Explore Collection
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    padding: 8rem 0 4rem;
+    text-align: center;
+  }
+
+  .collections-grid {
+    padding-bottom: 8rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  .collection-card {
+    display: block;
+    text-decoration: none;
+    position: relative;
+    border-radius: 16px;
+    padding: 1px; /* Border container */
+    background: var(--border-metal);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+
+  .card-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200%;
+    height: 200%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 120deg,
+      rgba(57, 255, 20, 0) 120deg,
+      rgba(57, 255, 20, 0.3) 140deg,
+      rgba(57, 255, 20, 0) 160deg,
+      transparent 160deg
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+
+  .collection-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+      0 30px 60px -15px rgba(0,0,0,0.6),
+      0 0 20px -5px rgba(57, 255, 20, 0.2);
+  }
+
+  .collection-card:hover .card-glow {
+    opacity: 1;
+    animation: rotateGlow 4s linear infinite;
+  }
+
+  @keyframes rotateGlow {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .card-inner {
+    position: relative;
+    background: var(--surface-card);
+    border-radius: 15px;
+    padding: 2.5rem;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Ambient gradient overlay */
+  .card-inner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at top left,
+      rgba(255,255,255,0.03) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+
+  .col-icon-wrap {
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    opacity: 0.1;
+    color: var(--text-primary);
+    transform: rotate(15deg);
+    transition: all 0.5s ease;
+  }
+
+  .collection-card:hover .col-icon-wrap {
+    opacity: 0.25;
+    transform: rotate(5deg) scale(1.1) translate(-0.5rem, 0.5rem);
+    color: var(--accent-neon);
+  }
+
+  .col-badge {
+    display: inline-flex;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .collection-card:hover .col-badge {
+    background: rgba(57, 255, 20, 0.1);
+    border-color: var(--accent-neon);
+    color: var(--accent-neon);
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    transition: color 0.3s ease;
+  }
+
+  .collection-card:hover h3 {
+    color: var(--accent-neon);
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .col-footer {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1.5rem;
+  }
+
+  .explore-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+  }
+
+  .explore-btn svg {
+    transition: transform 0.3s ease;
+  }
+
+  .collection-card:hover .explore-btn {
+    color: var(--accent-neon);
+  }
+
+  .collection-card:hover .explore-btn svg {
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 768px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .card-inner {
+      padding: 2rem;
+    }
+  }
+</style>

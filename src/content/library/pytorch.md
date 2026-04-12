@@ -2,6 +2,7 @@
 title: "PyTorch"
 description: "Tensors and Dynamic neural networks in Python with strong GPU acceleration."
 domain: "Machine Learning"
+collection: "ai-frameworks"
 stars: 75000
 links:
   github: "https://github.com/pytorch/pytorch"

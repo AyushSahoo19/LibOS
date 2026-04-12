@@ -1,7 +1,8 @@
 ---
 title: "Claude Code Prompts (Leonxlnx)"
 description: "30+ reconstructed Claude Code prompt patterns — coordinator, verification agent, explore agent, memory selection, security classifier."
-domain: "Tool"
+domain: "Repository"
+collection: "claude-skills"
 stars: 890
 links:
   github: "https://github.com/Leonxlnx/claude-code-system-prompts"

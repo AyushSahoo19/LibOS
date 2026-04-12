@@ -7,6 +7,7 @@ const libraryCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     domain: z.string(),
+    collection: z.string().optional(), // New field for grouping
     stars: z.number().optional(),
     links: z.object({
       github: z.string().optional(),
@@ -16,6 +17,16 @@ const libraryCollection = defineCollection({
   }),
 });
 
+const collectionsCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/collections" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    icon: z.string(), // Emoji or icon name
+  }),
+});
+
 export const collections = {
   'library': libraryCollection,
+  'collections': collectionsCollection,
 };

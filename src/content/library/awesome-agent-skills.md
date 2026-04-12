@@ -2,6 +2,7 @@
 title: "Awesome Agent Skills (VoltAgent)"
 description: "Official skills from Anthropic, Google Labs, Vercel, Stripe, Cloudflare, Netlify, Sentry, Figma, and Expo. The most trusted multi-agent compatible skills collection."
 domain: "Repository"
+collection: "ai-mastery-agents"
 stars: 5800
 links:
   github: "https://github.com/VoltAgent/awesome-agent-skills"

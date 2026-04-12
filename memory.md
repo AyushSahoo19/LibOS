@@ -26,6 +26,7 @@ The required markdown structure for any entry:
 title: "Name of the Tech"
 description: "A succinct 1-2 sentence pitch."
 domain: "Framework / Tool / Repository / Workflow"
+collection: "slug-of-collection" (e.g., claude-skills)
 stars: <number>
 links:
   github: "URL"
@@ -51,8 +52,10 @@ A brief introduction pointing out why it exists.
 2. **Global Leaderboard (`/top-rated`)**: Dynamic ranking of all libraries sorted by star counts, category-specific filtering, and silver/dark mode support.
 3. **Release Timeline (`/releases`)**: Architectural tracking of major version releases with themed status badges.
 4. **Tech Stacks (`/stacks`)**: Visual breakdown of architectural synergies (e.g., Python + MuJoCo).
-5. **Theme Engine**: Persistent Black & White (Silver/Platinum) toggle using CCS variables and `localStorage`.
-6. **Mobile First**: Fully responsive with a minimalist hamburger menu and high-contrast mobile navigation.
+5. **Collections Hub (`/collections`)**: Specialized curated groupings of repositories (e.g., Claude Skills, Design).
+6. **Best Collections (Hero)**: High-access mini-cards on the homepage with live repository counts.
+7. **Theme Engine**: Persistent Black & White (Silver/Platinum) toggle using CCS variables and `localStorage`.
+8. **Mobile First**: Fully responsive with a minimalist hamburger menu and high-contrast mobile navigation.
 
 ## Domains & Categories
 LibOS covers a vast scientific and technical landscape:

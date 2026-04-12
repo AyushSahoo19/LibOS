@@ -2,6 +2,7 @@
 title: "Blender"
 description: "The free and open source 3D creation suite representing the entirety of the 3D pipeline."
 domain: "3D Software"
+collection: "design-video-coding"
 stars: 32000
 links:
   github: "https://github.com/blender/blender"

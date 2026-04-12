@@ -2,6 +2,7 @@
 title: "NumPy"
 description: "The fundamental package for scientific computing with Python."
 domain: "Library"
+collection: "ai-frameworks"
 stars: 26000
 links:
   github: "https://github.com/numpy/numpy"
