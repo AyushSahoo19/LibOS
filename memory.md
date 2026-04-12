@@ -1,72 +1,64 @@
 # LibOS - The Developer's Library Project Memory
 
 ## Vision & Purpose
-LibOS is a minimalistic, curated, and premium web directory designed for developers, innovators, and AI enthusiasts. It serves as an elevated alternative to standard layouts like GitHub, focusing on deep, actionable overviews of the best repositories, frameworks, tools, and workflows in the tech ecosystem.
+LibOS is a minimalistic, curated, and premium web directory designed for developers, innovators, and AI enthusiasts. It serves as an elevated alternative to standard layouts like GitHub, focusing on deep, actionable overviews of the best repositories, frameworks, tools, and workflows in the tech ecosystem. 
+
+**Current Scale**: 100+ handpicked repositories across 7 curated collections.
 
 ## Tech Stack
 - **Framework**: Astro (v6.x) + Vanilla CSS
-- **Content Approach**: Markdown files managed via Astro Collections.
+- **Content Approach**: Markdown files managed via Astro Content Collections (`library` and `collections`).
+- **Interactions**: Vanilla JavaScript with Native Scroll APIs.
 
 ## Design Philosophy "Metallic Contrast & Minimal"
 - **Theme**: Ultra-premium dual-mode system (Dark: "Deep Black", Light: "Silver/Platinum").
 - **Aesthetics**: 
-  - **Metallic Cards**: Linear gradients, razor-thin silver edges, and top-edge catch-lights.
-  - **Silver Mode**: A polished platinum finish (`#f8f8fa`) as a counterpart to the piano-lacquer black.
-  - **Interactions**: Hover shimmer sweeps, vertical timeline markers, and glowing status badges.
-  - **Layout**: Floating sticky navbar with themed glass panels (`--glass-bg`), two-column main layout.
+  - **Metallic Finish**: Linear gradients, razor-thin silver edges, and top-edge catch-lights.
+  - **Micro-Texture**: Use of low-opacity noise/grain overlays (`mix-blend-mode: overlay`) to simulate brushed metal.
+  - **Silver Mode**: A polished platinum finish (`#f8f8fa`) using `--bg-primary` variables.
+  - **Layout**: Two-column main layout with a floating sticky glass pill navbar.
 - **Typography**: `Inter` (Body) + `Fira Code` (Technical/Mono).
-- **Theme Native**: Persistent theme switching via a clean Sun/Moon UI with `localStorage` memory.
 
 ## Content Structure
-Located in `src/content/library/`
-
-The required markdown structure for any entry:
+### Library (`src/content/library/`)
+Required YAML frontmatter:
 ```markdown
 ---
-title: "Name of the Tech"
-description: "A succinct 1-2 sentence pitch."
-domain: "Framework / Tool / Repository / Workflow"
-collection: "slug-of-collection" (e.g., claude-skills)
-stars: <number>
-links:
-  github: "URL"
-  website: "URL"
-tags: ["tag1", "tag2"]
+title: "Name"
+description: "Succinct pitch."
+domain: "Framework/Tool/etc."
+collection: "ai-frameworks" (slug from collections)
+stars: 125000
+links: { github: "URL", website: "URL" }
+tags: ["tag1"]
 ---
-
-## Overview
-A brief introduction pointing out why it exists.
-
-## Features
-- Outline core capabilities in bullet points.
-
-## Use Cases
-- When and why to use it.
-
-## Technical Advantages
-- Performance, architectural benefits, ecosystem leverage etc.
 ```
 
+### Collections (`src/content/collections/`)
+Used to group related repositories with metadata and SVG branding.
+
+## Interactive System Architecture
+### Universal Native Scroll
+Implemented in `src/pages/index.astro` for the "Best Collections" gallery.
+- **Mechanism**: Uses `wrapper.scrollLeft` (native) instead of CSS `translateX` transforms.
+- **Features**: 
+  - Supports natural trackpad "sliding" and horizontal mouse wheels.
+  - Does NOT hijack the vertical wheel, allowing normal page scrolling while hovering over cards.
+  - **Infinite Loop**: Resets `scrollLeft` instantly when boundary is hit (Teleport Loop).
+  - **Grab-to-Scroll**: Manual mouse dragging synced with `scrollLeft`.
+  - **Pause-on-Hover**: Auto-scrolling stops when user navigates content.
+
 ## Features & Pages
-1. **Directory Hub (`/`)**: Main search and filter interface with theme-aware metallic cards.
-2. **Global Leaderboard (`/top-rated`)**: Dynamic ranking of all libraries sorted by star counts, category-specific filtering, and silver/dark mode support.
-3. **Release Timeline (`/releases`)**: Architectural tracking of major version releases with themed status badges.
-4. **Tech Stacks (`/stacks`)**: Visual breakdown of architectural synergies (e.g., Python + MuJoCo).
-5. **Collections Hub (`/collections`)**: Specialized curated groupings of repositories (e.g., Claude Skills, Design).
-6. **Best Collections (Hero)**: High-access mini-cards on the homepage with live repository counts.
-7. **Theme Engine**: Persistent Black & White (Silver/Platinum) toggle using CCS variables and `localStorage`.
-8. **Mobile First**: Fully responsive with a minimalist hamburger menu and high-contrast mobile navigation.
+1. **Directory Hub (`/`)**: Search/filter interface with auto-scrolling hero collections.
+2. **Collections Hub (`/collections`)**: Premium grid of 7 category paths with asymmetric visual depth.
+3. **Leaderboard (`/top-rated`)**: Ranking by star counts with dynamic category filters.
+4. **Timeline (`/releases`) & Stacks (`/stacks`)**: Architectural tracking and technology synergies.
+5. **Theme Engine**: Persistent state via `localStorage` and CSS variables.
 
 ## Domains & Categories
-LibOS covers a vast scientific and technical landscape:
-- **AI & Machine Learning**: Neural networks, LLMs, and data-ops.
-- **Robotics & Simulation**: ROS 2, MuJoCo, and hardware bridges.
-- **Quantum Computing**: Qiskit and simulator SDKs.
-- **Physics & Chemistry**: RDKit, symbolic math, and dynamics engines.
-- **Finance & Trading**: Algorithmic trading and quant engines (e.g., Freqtrade).
-- **3D & VFX**: Blender and real-time rendering pipelines.
-- **Web & Infrastructure**: React, Next.js, and core utility libraries.
-- **AI Agents**: Autonomous workflows and skill-sets.
+- **AI & ML**: Frameworks, Agents, and NLP.
+- **Engineering**: Robotics, Simulation, and Systems.
+- **Ecosystem**: Web3, Blockchain, and Open Source utilities.
 
 ## Git & License
 - **Repository**: [AyushSahoo19/LibOS](https://github.com/AyushSahoo19/LibOS)
