@@ -2,6 +2,7 @@
 title: "Supabase Next.js Template (Razikus)"
 description: "Next.js 15 + Supabase production template: auth, user management, file storage, RLS policies, task management demos, and React Native mobile support."
 domain: "Repository"
+collection: "founders-startup"
 stars: 1900
 links:
   github: "https://github.com/Razikus/supabase-nextjs-template"

@@ -1,26 +1,33 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Card from '../../components/Card.astro';
+import Layout from '../../../layouts/Layout.astro';
+import Card from '../../../components/Card.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
+  const playbooks = await getCollection('playbooks');
   const collections = await getCollection('collections');
-  return collections.map(col => ({
-    params: { id: col.id },
-    props: { collection: col },
-  }));
+
+  return playbooks.map(playbook => {
+    const parentCollection = collections.find(c => c.id === playbook.data.collectionId);
+    return {
+      params: { 
+        id: playbook.data.collectionId,
+        slug: playbook.id 
+      },
+      props: { playbook, collection: parentCollection },
+    };
+  });
 }
 
-const { collection } = Astro.props;
-const { Content } = await render(collection);
-const allLibraryEntries = await getCollection('library');
-const allPlaybooks = await getCollection('playbooks');
+const { playbook, collection } = Astro.props;
+const { Content } = await render(playbook);
 
-// Filter guides for this collection
+const allPlaybooks = await getCollection('playbooks');
 const collectionPlaybooks = allPlaybooks
   .filter(p => p.data.collectionId === collection.id)
   .sort((a, b) => a.data.order - b.data.order);
 
+const allLibraryEntries = await getCollection('library');
 const entries = allLibraryEntries.filter(entry => {
   const col = entry.data.collection;
   if (!col) return false;
@@ -29,7 +36,7 @@ const entries = allLibraryEntries.filter(entry => {
 });
 ---
 
-<Layout title={`${collection.data.title} | Documentation | LibOS`}>
+<Layout title={`${playbook.data.title} | ${collection.data.title} | LibOS`}>
   <div class="doc-layout container">
     <!-- Sidebar -->
     <aside class="doc-sidebar">
@@ -42,25 +49,28 @@ const entries = allLibraryEntries.filter(entry => {
         <nav class="sidebar-nav">
           <div class="nav-section">
             <h4 class="nav-label">Core Guide</h4>
-            <a href={`/collections/${collection.id}`} class="nav-link active">Overview</a>
+            <a href={`/collections/${collection.id}`} class="nav-link">Overview</a>
           </div>
 
-          {collectionPlaybooks.length > 0 && (
-            <div class="nav-section">
-              <h4 class="nav-label">Guides & Workflows</h4>
-              {collectionPlaybooks.map(playbook => (
-                <a href={`/collections/${collection.id}/${playbook.id}`} class="nav-link">
-                  {playbook.data.title}
-                </a>
-              ))}
-            </div>
-          )}
+          <div class="nav-section">
+            <h4 class="nav-label">Guides & Workflows</h4>
+            {collectionPlaybooks.map(p => (
+              <a 
+                href={`/collections/${collection.id}/${p.id}`} 
+                class={`nav-link ${p.id === playbook.id ? 'active' : ''}`}
+              >
+                {p.data.title}
+              </a>
+            ))}
+          </div>
 
           <div class="nav-section">
             <h4 class="nav-label">Repositories</h4>
             <div class="nav-repo-list">
               {entries.map(entry => (
-                <a href={`#repo-${entry.id}`} class="nav-link-sm">{entry.data.title}</a>
+                <a href={`/collections/${collection.id}#repo-${entry.id}`} class="nav-link-sm">
+                  {entry.data.title}
+                </a>
               ))}
             </div>
           </div>
@@ -71,15 +81,18 @@ const entries = allLibraryEntries.filter(entry => {
     <!-- Main Content -->
     <main class="doc-content">
       <div class="breadcrumb">
-        <a href="/collections">Playbooks</a> / <span>{collection.data.title}</span>
+        <a href="/collections">Playbooks</a> / 
+        <a href={`/collections/${collection.id}`}>{collection.data.title}</a> / 
+        <span>{playbook.data.title}</span>
       </div>
 
-      <header class="doc-header" id="overview">
-        <h1 class="text-gradient">{collection.data.title}</h1>
-        <p class="lead">{collection.data.description}</p>
+      <header class="doc-header">
+        <div class="category-badge">{playbook.data.category}</div>
+        <h1 class="text-gradient">{playbook.data.title}</h1>
+        <p class="lead">{playbook.data.description}</p>
       </header>
 
-      <div class="doc-body prose" id="documentation">
+      <div class="doc-body prose">
         <Content />
       </div>
 
@@ -102,6 +115,21 @@ const entries = allLibraryEntries.filter(entry => {
           ))}
         </div>
       </section>
+
+      <footer class="doc-footer-nav">
+        {collectionPlaybooks.findIndex(p => p.id === playbook.id) > 0 && (
+          <a href={`/collections/${collection.id}/${collectionPlaybooks[collectionPlaybooks.findIndex(p => p.id === playbook.id) - 1].id}`} class="prev-guide">
+            <span class="nav-dir">← Previous</span>
+            <span class="nav-title">{collectionPlaybooks[collectionPlaybooks.findIndex(p => p.id === playbook.id) - 1].data.title}</span>
+          </a>
+        )}
+        {collectionPlaybooks.findIndex(p => p.id === playbook.id) < collectionPlaybooks.length - 1 && (
+          <a href={`/collections/${collection.id}/${collectionPlaybooks[collectionPlaybooks.findIndex(p => p.id === playbook.id) + 1].id}`} class="next-guide">
+            <span class="nav-dir">Next →</span>
+            <span class="nav-title">{collectionPlaybooks[collectionPlaybooks.findIndex(p => p.id === playbook.id) + 1].data.title}</span>
+          </a>
+        )}
+      </footer>
     </main>
   </div>
 </Layout>
@@ -245,6 +273,20 @@ const entries = allLibraryEntries.filter(entry => {
     line-height: 1.6;
   }
 
+  .category-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: rgba(57, 255, 20, 0.1);
+    color: var(--accent-neon);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
   /* Prose Styles */
   .prose {
     color: var(--text-primary);
@@ -310,6 +352,46 @@ const entries = allLibraryEntries.filter(entry => {
 
   .anchor-offset {
     scroll-margin-top: 120px;
+  }
+
+  .doc-footer-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    gap: 2rem;
+  }
+
+  .prev-guide, .next-guide {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    max-width: 45%;
+  }
+
+  .next-guide {
+    text-align: right;
+    align-items: flex-end;
+    margin-left: auto;
+  }
+
+  .nav-dir {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+  }
+
+  .prev-guide:hover .nav-title, .next-guide:hover .nav-title {
+    color: var(--accent-neon);
   }
 
   @media (max-width: 1024px) {

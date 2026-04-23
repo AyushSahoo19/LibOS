@@ -2,6 +2,7 @@
 title: "Next.js Boilerplate (ixartz)"
 description: "Developer-experience gold standard: Next.js 16 + TypeScript + Drizzle + Vitest + Playwright + Storybook + Husky + Commitlint + Sentry + Codecov. The baseline everyone copies."
 domain: "Repository"
+collection: "founders-startup"
 stars: 9200
 links:
   github: "https://github.com/ixartz/Next-js-Boilerplate"

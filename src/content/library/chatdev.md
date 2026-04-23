@@ -2,7 +2,7 @@
 title: "ChatDev"
 description: "A virtual software company powered by multiple agents playing the roles of CEO, CPO, CTO, and programmers."
 domain: "Multi-Agent"
-collection: "ai-mastery-agents"
+collection: ["ai-mastery-agents", "founders-startup"]
 stars: 23000
 links:
   github: "https://github.com/OpenBMB/ChatDev"

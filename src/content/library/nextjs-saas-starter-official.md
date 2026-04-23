@@ -2,6 +2,7 @@
 title: "Next.js SaaS Starter (Official)"
 description: "Official Vercel/Next.js team SaaS template — Next.js + Postgres + Stripe + shadcn/ui. Authoritative patterns for Server Actions, useActionState, and useFormStatus."
 domain: "Repository"
+collection: "founders-startup"
 stars: 8700
 links:
   github: "https://github.com/nextjs/saas-starter"

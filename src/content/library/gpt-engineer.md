@@ -1,12 +1,12 @@
 ---
 title: "GPT Engineer"
-description: "Specify what you want it to build, the AI asks for clarification, and then builds the entire codebase."
-domain: "Tool"
-collection: "ai-mastery-agents"
+description: "Specify what you want to build, the AI asks for clarification, and then builds the entire codebase."
+domain: "AI Agent"
+collection: ["ai-mastery-agents", "founders-startup"]
 stars: 48000
 links:
   github: "https://github.com/gpt-engineer-org/gpt-engineer"
-tags: ["Code Generation", "Autonomous", "Scaffolding", "GPT"]
+tags: ["AI", "Software Engineering", "Automation", "Python"]
 ---
 
 ## Overview

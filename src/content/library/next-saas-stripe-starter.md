@@ -2,6 +2,7 @@
 title: "next-saas-stripe-starter (mickasmt)"
 description: "Next.js 14 + Prisma + Neon + Auth.js v5 + Stripe — with user roles, admin panel, React Email, and Resend. Clean, modern architecture."
 domain: "Repository"
+collection: "founders-startup"
 stars: 4100
 links:
   github: "https://github.com/mickasmt/next-saas-stripe-starter"

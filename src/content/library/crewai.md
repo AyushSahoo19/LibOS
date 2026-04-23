@@ -2,7 +2,7 @@
 title: "CrewAI"
 description: "Framework for orchestrating role-playing, autonomous AI agents. By fostering collaborative intelligence."
 domain: "Framework"
-collection: "ai-mastery-agents"
+collection: ["ai-mastery-agents", "founders-startup"]
 stars: 18000
 links:
   github: "https://github.com/joaomdmoura/crewAI"

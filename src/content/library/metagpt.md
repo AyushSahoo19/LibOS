@@ -2,7 +2,7 @@
 title: "MetaGPT"
 description: "The Multi-Agent Framework: Assign different roles to GPTs to form a collaborative software entity for complex tasks."
 domain: "Framework"
-collection: "ai-mastery-agents"
+collection: ["ai-mastery-agents", "founders-startup"]
 stars: 42000
 links:
   github: "https://github.com/geekan/MetaGPT"

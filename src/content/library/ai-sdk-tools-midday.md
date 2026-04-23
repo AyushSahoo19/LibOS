@@ -2,6 +2,7 @@
 title: "AI SDK Tools (midday-ai)"
 description: "Production utilities for Vercel AI SDK — Agent class, artifact streaming, cached tool caching, AIDevtools, multi-agent orchestration with handoffs, and persistent Upstash memory."
 domain: "Tool"
+collection: "founders-startup"
 stars: 3200
 links:
   github: "https://github.com/midday-ai/ai-sdk-tools"

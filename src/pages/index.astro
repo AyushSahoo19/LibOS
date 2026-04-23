@@ -7,9 +7,14 @@ import { getCollection } from 'astro:content';
 const allEntries = await getCollection('library');
 const collections = await getCollection('collections');
 
-// Calculate repo counts per collection
+// Calculate repo counts per collection (Supporting multiple collection tags)
 const collectionCounts = collections.reduce((acc, col) => {
-  acc[col.id] = allEntries.filter(entry => entry.data.collection === col.id).length;
+  acc[col.id] = allEntries.filter(entry => {
+    const c = entry.data.collection;
+    if (!c) return false;
+    if (Array.isArray(c)) return c.includes(col.id);
+    return c === col.id;
+  }).length;
   return acc;
 }, {} as Record<string, number>);
 
@@ -69,6 +74,52 @@ const trendingStacks = [
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Engineering Playbooks Section -->
+  <section class="playbook-section container">
+    <div class="section-header-minimal">
+      <h2 class="section-title-mono">Engineering Playbooks</h2>
+      <p class="section-subtitle-sm">Curated ecosystems for specific engineering domains.</p>
+    </div>
+    
+    <div class="playbook-grid">
+      <a href="/collections/founders-startup" class="playbook-card">
+        <div class="playbook-card-content">
+          <div class="playbook-icon-sm">🚀</div>
+          <h3 class="playbook-title">Founders & Startups</h3>
+          <p class="playbook-desc">Automated agent workflows and SaaS stacks for solo technical founders.</p>
+          <div class="playbook-meta">
+            <span class="playbook-count">{collectionCounts['founders-startup'] || 13} Repositories</span>
+            <span class="playbook-link">View Playbook →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/collections/ai-mastery-agents" class="playbook-card">
+        <div class="playbook-card-content">
+          <div class="playbook-icon-sm">🧠</div>
+          <h3 class="playbook-title">AI Mastery & Agents</h3>
+          <p class="playbook-desc">Core frameworks for autonomous agents, multi-agent systems, and LLM logic.</p>
+          <div class="playbook-meta">
+            <span class="playbook-count">{collectionCounts['ai-mastery-agents'] || 11} Repositories</span>
+            <span class="playbook-link">View Playbook →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="/collections/claude-skills" class="playbook-card">
+        <div class="playbook-card-content">
+          <div class="playbook-icon-sm">🏗️</div>
+          <h3 class="playbook-title">Claude Skills</h3>
+          <p class="playbook-desc">Specialized subagent definitions and skillsets for Claude-driven automation.</p>
+          <div class="playbook-meta">
+            <span class="playbook-count">{collectionCounts['claude-skills'] || 11} Repositories</span>
+            <span class="playbook-link">View Playbook →</span>
+          </div>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -1222,6 +1273,158 @@ const trendingStacks = [
     /* Section label */
     .metrics-label-text {
       font-size: 0.55rem;
+    }
+  }
+
+  /* ─── Playbook Section ────────────────────────────────── */
+  .playbook-section {
+    margin: 4rem auto;
+    padding: 0 1rem;
+  }
+
+  .section-header-minimal {
+    margin-bottom: 2.5rem;
+    text-align: left;
+    border-left: 2px solid var(--accent-neon);
+    padding-left: 1.5rem;
+  }
+
+  .section-title-mono {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle-sm {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+  }
+
+  .playbook-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .playbook-card {
+    display: block;
+    text-decoration: none;
+    padding: 1px;
+    background: var(--border-metal);
+    border-radius: 12px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .playbook-card-content {
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 11px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Subtle noise texture */
+  .playbook-card-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .playbook-icon-sm {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    filter: grayscale(1);
+    transition: filter 0.3s ease, transform 0.3s ease;
+  }
+
+  .playbook-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .playbook-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+
+  .playbook-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .playbook-count {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .playbook-link {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-neon);
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+  }
+
+  /* Hover Effects */
+  .playbook-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-neon);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+  }
+
+  .playbook-card:hover .playbook-icon-sm {
+    filter: grayscale(0);
+    transform: scale(1.1);
+  }
+
+  .playbook-card:hover .playbook-link {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* ─── Mobile Responsiveness ─────────────────────────────── */
+  @media (max-width: 1024px) {
+    .playbook-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .playbook-grid {
+      grid-template-columns: 1fr;
+    }
+    .section-header-minimal {
+      padding-left: 1rem;
+    }
+    .section-title-mono {
+      font-size: 1.1rem;
     }
   }
 </style>

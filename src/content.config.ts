@@ -7,7 +7,7 @@ const libraryCollection = defineCollection({
     title: z.string(),
     description: z.string(),
     domain: z.string(),
-    collection: z.string().optional(), // New field for grouping
+    collection: z.union([z.string(), z.array(z.string())]).optional(),
     stars: z.number().optional(),
     links: z.object({
       github: z.string().optional(),
@@ -22,11 +22,23 @@ const collectionsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    icon: z.string(), // Emoji or icon name
+    icon: z.string(),
+  }),
+});
+
+const playbooksCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/playbooks" }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    collectionId: z.string(), 
+    order: z.number().default(0),
+    category: z.string().optional(),
   }),
 });
 
 export const collections = {
   'library': libraryCollection,
   'collections': collectionsCollection,
+  'playbooks': playbooksCollection,
 };
