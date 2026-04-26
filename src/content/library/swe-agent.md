@@ -2,7 +2,7 @@
 title: "SWE-agent"
 description: "Turns LMs into software engineers that can fix bugs in real GitHub repositories."
 domain: "AI Agent"
-collection: "ai-mastery-agents"
+collection: ["ai-mastery-agents", "autonomous-coding"]
 stars: 12000
 links:
   github: "https://github.com/princeton-nlp/swe-agent"

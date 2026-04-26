@@ -2,7 +2,7 @@
 title: "OpenDevin"
 description: "An open-source autonomous AI software engineer capable of solving complex engineering tasks."
 domain: "AI Agent"
-collection: "ai-mastery-agents"
+collection: ["ai-mastery-agents", "autonomous-coding"]
 stars: 25000
 links:
   github: "https://github.com/OpenDevin/OpenDevin"
