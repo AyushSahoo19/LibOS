@@ -42,6 +42,13 @@ const trendingStacks = [
 <Layout title="LibOS | Directory of Repos & Tools">
   <section class="hero relative">
     <div class="hero-glow"></div>
+    <div class="hero-stars"></div>
+    <div class="hero-bg-icons">
+      <svg class="bg-icon icon-1" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+      <svg class="bg-icon icon-2" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+      <svg class="bg-icon icon-3" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+      <svg class="bg-icon icon-4" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7a3.37 3.37 0 0 0-.94 2.58V22"></path></svg>
+    </div>
     <div class="container hero-content">
       <h1 class="title-glow text-gradient">The Ultimate Library</h1>
       <p class="subtitle">A curated, minimalist directory representing the absolute best repositories, tools, frameworks, and workflows for modern developers and innovators.</p>
@@ -139,7 +146,7 @@ const trendingStacks = [
             title={entry.data.title}
             description={entry.data.description}
             domain={entry.data.domain}
-            slug={entry.id || entry.slug}
+            slug={entry.id}
             stars={entry.data.stars}
           />
         ))}
@@ -369,15 +376,15 @@ const trendingStacks = [
 
   // Best Collections Interactive Scroller (Native Scroll Edition)
   const setupCollectionScroller = () => {
-    const wrapper = document.querySelector('.bc-scroll-wrapper');
-    const list = document.querySelector('.bc-list');
+    const wrapper = document.querySelector('.bc-scroll-wrapper') as HTMLElement | null;
+    const list = document.querySelector('.bc-list') as HTMLElement | null;
     if (!wrapper || !list) return;
 
     let isDown = false;
-    let startX;
-    let scrollLeft;
+    let startX: number;
+    let scrollLeft: number;
     let isHovered = false;
-    let animationId;
+    let animationId: number;
 
     // Auto-scroll speed (pixels per frame)
     const speed = 0.5; 
@@ -401,8 +408,9 @@ const trendingStacks = [
 
     // Mouse Events for Drag
     wrapper.addEventListener('mousedown', (e) => {
+      const mouseEvent = e as MouseEvent;
       isDown = true;
-      startX = e.pageX - wrapper.offsetLeft;
+      startX = mouseEvent.pageX - wrapper.offsetLeft;
       scrollLeft = wrapper.scrollLeft;
       wrapper.classList.add('grabbing');
     });
@@ -436,7 +444,8 @@ const trendingStacks = [
     window.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
-      const x = e.pageX - wrapper.offsetLeft;
+      const mouseEvent = e as MouseEvent;
+      const x = mouseEvent.pageX - wrapper.offsetLeft;
       const walk = (x - startX) * 1.5; // multiplier for drag sensitivity
       wrapper.scrollLeft = scrollLeft - walk;
     });
@@ -467,6 +476,56 @@ const trendingStacks = [
     pointer-events: none;
     opacity: 0.8;
     animation: glowBreathe 8s ease-in-out infinite;
+  }
+
+  /* ─── Hero Decorative Background ───────────────────────── */
+  .hero-stars {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(1.5px 1.5px at 10% 20%, var(--accent-neon), transparent),
+      radial-gradient(1.5px 1.5px at 30% 50%, white, transparent),
+      radial-gradient(1.5px 1.5px at 50% 80%, var(--accent-neon), transparent),
+      radial-gradient(2px 2px at 80% 30%, white, transparent),
+      radial-gradient(1.5px 1.5px at 90% 10%, var(--accent-neon), transparent),
+      radial-gradient(1.5px 1.5px at 20% 70%, white, transparent);
+    background-size: 200% 200%;
+    opacity: 0.25;
+    z-index: -1;
+    pointer-events: none;
+    animation: starsDrift 100s linear infinite;
+    filter: drop-shadow(0 0 2px var(--accent-glow));
+  }
+
+  @keyframes starsDrift {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+  }
+
+  .hero-bg-icons {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .bg-icon {
+    position: absolute;
+    color: var(--text-primary);
+    opacity: 0.06;
+    filter: blur(1px);
+    animation: floatIcon 20s ease-in-out infinite;
+  }
+
+  .icon-1 { top: 15%; left: 10%; animation-delay: 0s; }
+  .icon-2 { top: 60%; left: 15%; animation-delay: -5s; transform: rotate(15deg); }
+  .icon-3 { top: 25%; right: 12%; animation-delay: -2s; transform: rotate(-10deg); }
+  .icon-4 { top: 70%; right: 18%; animation-delay: -12s; transform: rotate(5deg); }
+
+  @keyframes floatIcon {
+    0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+    50% { transform: translateY(-20px) rotate(calc(var(--rot, 0deg) + 5deg)); }
   }
 
   @keyframes glowBreathe {
