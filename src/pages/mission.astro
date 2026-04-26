@@ -1,0 +1,174 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Our Mission | LibOS">
+  <main class="container mission-page">
+    <header class="mission-header">
+      <div class="mission-badge">Our Vision</div>
+      <h1 class="text-gradient">The Missing Manual for the Open Source World</h1>
+      <p class="lead">
+        LibOS is on a mission to turn the chaos of 200M+ GitHub repositories into actionable Engineering Playbooks.
+      </p>
+    </header>
+
+    <div class="mission-content prose">
+      <section>
+        <h2>The Problem: The "Starred" Graveyard</h2>
+        <p>
+          GitHub is a graveyard of 10k+ star repositories that nobody knows how to actually integrate. Engineers spend more time "starring" than "building." Information is scattered, and the "synergy" between different open-source tools is never explained.
+        </p>
+      </section>
+
+      <section>
+        <h2>The Solution: Engineering Playbooks</h2>
+        <p>
+          We don't just list repositories; we architect phased roadmaps that show you how to combine them into production-ready ecosystems. Whether you're a solo founder building an "Auto-Pilot Startup" or a developer mastering "Vibe Coding," LibOS gives you the blueprint.
+        </p>
+      </section>
+
+      <div class="mission-grid">
+        <div class="mission-card">
+          <div class="card-icon">🚀</div>
+          <h3>Phased Blueprints</h3>
+          <p>Step-by-step guides for zero-to-production implementation.</p>
+        </div>
+        <div class="mission-card">
+          <div class="card-icon">🏗️</div>
+          <h3>Ecosystem Mapping</h3>
+          <p>See how tools like CrewAI, Midday, and Supabase work together.</p>
+        </div>
+        <div class="mission-card">
+          <div class="card-icon">🧠</div>
+          <h3>Vibe Coding</h3>
+          <p>A new philosophy for agentic software development and intent.</p>
+        </div>
+      </div>
+
+      <section class="mission-cta">
+        <h2>Join the Revolution</h2>
+        <p>
+          The next wave of billion-dollar companies will be built by "teams of one" leveraging a fleet of open-source agents. We are here to provide the educational infrastructure that makes this possible.
+        </p>
+        <a href="/collections" class="btn-primary">Explore Playbooks</a>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .mission-page {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    max-width: 800px;
+  }
+
+  .mission-header {
+    text-align: center;
+    margin-bottom: 6rem;
+  }
+
+  .mission-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(57, 255, 20, 0.1);
+    color: var(--accent-neon);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .mission-header h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    letter-spacing: -0.03em;
+  }
+
+  .lead {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .mission-content h2 {
+    font-size: 2rem;
+    margin: 4rem 0 2rem;
+  }
+
+  .mission-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 6rem 0;
+  }
+
+  .mission-card {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .mission-card:hover {
+    border-color: var(--accent-neon);
+    transform: translateY(-8px);
+    background: rgba(57, 255, 20, 0.02);
+  }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mission-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .mission-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .mission-cta {
+    text-align: center;
+    padding: 6rem;
+    background: linear-gradient(to bottom, transparent, rgba(57, 255, 20, 0.03));
+    border-radius: 32px;
+    border: 1px solid rgba(57, 255, 20, 0.1);
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 1.25rem 3rem;
+    background: var(--accent-neon);
+    color: black;
+    text-decoration: none;
+    font-weight: 800;
+    border-radius: 8px;
+    margin-top: 3rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .mission-grid {
+      grid-template-columns: 1fr;
+    }
+    .mission-header h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>
